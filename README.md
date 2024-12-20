@@ -1,14 +1,14 @@
 # group_02_project
 
-## About the Project
+## Project Overview:
 
-### Overview:
+### Summary:
 
-#### Taker Strategy Details:
+#### Taker Strategy Overview:
 
-#### Taker Strategy Details:
+#### Maker Strategy Overview:
 
-## Getting started and System Setup
+## Getting Started and System Setup
 
 #### Cloning the Repo:
 
@@ -35,6 +35,8 @@ Once you have Anaconda3 on your system and are inside the group02 repo, use the 
 TODO: Once Project is completed export the yaml/yml inside the repo
 conda env create -f environment.yml
 ```
+
+## Understanding the Codebase
 
 ## Teammates
 
