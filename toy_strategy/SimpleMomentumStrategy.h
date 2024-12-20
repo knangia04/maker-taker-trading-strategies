@@ -1,27 +1,7 @@
-/*================================================================================
-*     Source: ../RCM/StrategyStudio/examples/strategies/SimpleMomentumStrategy/SimpleMomentumStrategy.h
-*     Last Update: 2021/04/15 13:55:14
-*     Contents:
-*     Distribution:
-*
-*
-*     Copyright (c) RCM-X, 2011 - 2021.
-*     All rights reserved.
-*
-*     This software is part of Licensed material, which is the property of RCM-X ("Company"), 
-*     and constitutes Confidential Information of the Company.
-*     Unauthorized use, modification, duplication or distribution is strictly prohibited by Federal law.
-*     No title to or ownership of this software is hereby transferred.
-*
-*     The software is provided "as is", and in no event shall the Company or any of its affiliates or successors be liable for any 
-*     damages, including any lost profits or other incidental or consequential damages relating to the use of this software.       
-*     The Company makes no representations or warranties, express or implied, with regards to this software.                        
-/*================================================================================*/
-
 #pragma once
 
-#ifndef _STRATEGY_STUDIO_LIB_EXAMPLES_SIMPLE_MOMENTUM_STRATEGY_H_
-#define _STRATEGY_STUDIO_LIB_EXAMPLES_SIMPLE_MOMENTUM_STRATEGY_H_
+#ifndef _STRATEGY_STUDIO_LIB_EXAMPLES_MARKET_KING_GRID_STRATEGY_H_
+#define _STRATEGY_STUDIO_LIB_EXAMPLES_MARKET_KING_GRID_STRATEGY_H_
 
 #ifdef _WIN32
     #define _STRATEGY_EXPORTS __declspec(dllexport)
@@ -32,170 +12,76 @@
 #endif
 
 #include <Strategy.h>
-#include <Analytics/ScalarRollingWindow.h>
-#include <Analytics/InhomogeneousOperators.h>
-#include <Analytics/IncrementalEstimation.h>
 #include <MarketModels/Instrument.h>
 #include <Utilities/ParseConfig.h>
-
-
 #include <vector>
 #include <map>
 #include <iostream>
 
 using namespace RCM::StrategyStudio;
 
-enum DesiredPositionSide {
-    DESIRED_POSITION_SIDE_SHORT=-1,
-    DESIRED_POSITION_SIDE_FLAT=0,
-    DESIRED_POSITION_SIDE_LONG=1
-};
-
-class Momentum {
+class Grid {
 public:
-    Momentum(int short_window_size = 10, int long_window_size = 30) : short_window_(short_window_size), long_window_(long_window_size) {}
-
-    void Reset()
-    {
-        short_window_.clear();
-        long_window_.clear();
+    Grid(double grid_spacing, double lower_bound, double upper_bound)
+        : grid_spacing_(grid_spacing), lower_bound_(lower_bound), upper_bound_(upper_bound) {
+        InitializeGrid();
     }
 
-    DesiredPositionSide Update(double val)
-    {
-        short_window_.push_back(val);
-        long_window_.push_back(val);
-        if (short_window_.Mean()>long_window_.Mean()) {
-            return DESIRED_POSITION_SIDE_LONG;
-        } else {
-            return DESIRED_POSITION_SIDE_SHORT;
+    void InitializeGrid() {
+        grid_levels_.clear();
+        for (double price = lower_bound_; price <= upper_bound_; price += grid_spacing_) {
+            grid_levels_.push_back(price);
         }
     }
 
-    bool FullyInitialized() { return (short_window_.full() && long_window_.full()); }
-    
-    Analytics::ScalarRollingWindow<double> short_window_;
-    Analytics::ScalarRollingWindow<double> long_window_;
+    void Reset(double new_lower_bound, double new_upper_bound) {
+        lower_bound_ = new_lower_bound;
+        upper_bound_ = new_upper_bound;
+        InitializeGrid();
+    }
+
+    const std::vector<double>& GetGridLevels() const { return grid_levels_; }
+
+private:
+    double grid_spacing_;
+    double lower_bound_;
+    double upper_bound_;
+    std::vector<double> grid_levels_;
 };
 
-class SimpleMomentum : public Strategy {
+class MarketKingGrid : public Strategy {
 public:
-    typedef boost::unordered_map<const Instrument*, Momentum> MomentumMap; 
-    // creates an unordered map where keys are instrument names and values are corresponding classes 
-    // all these pairs are set to a map called MomentumMap
-    typedef MomentumMap::iterator MomentumMapIterator; 
-    // we define an iterator that iterates through these key value pairs 
-
-public:
-    SimpleMomentum(StrategyID strategyID, const std::string& strategyName, const std::string& groupName);
-    ~SimpleMomentum();
+    MarketKingGrid(StrategyID strategyID, const std::string& strategyName, const std::string& groupName);
+    ~MarketKingGrid();
 
 public: /* from IEventCallback */
-    /**
-     * This event triggers whenever trade message arrives from a market data source.
-     */ 
-    virtual void OnTrade(const TradeDataEventMsg& msg){}
-
-    /**
-     * This event triggers whenever aggregate volume at best price changes, based 
-     * on the best available source of liquidity information for the instrument.
-     *
-     * If the quote datasource only provides ticks that change the NBBO, top quote will be set to NBBO
-     */ 
-    virtual void OnTopQuote(const QuoteEventMsg& msg){}    
-    
-    /**
-     * This event triggers whenever a new quote for a market center arrives from a consolidate or direct quote feed,
-     * or when the market center's best price from a depth of book feed changes.
-     *
-     * User can check if quote is from consolidated or direct, or derived from a depth feed. This will not fire if
-     * the data source only provides quotes that affect the official NBBO, as this is not enough information to accurately
-     * mantain the state of each market center's quote.
-     */ 
-    virtual void OnQuote(const QuoteEventMsg& msg){}
-    
-    /**
-     * This event triggers whenever a order book message arrives. This will be the first thing that
-     * triggers if an order book entry impacts the exchange's DirectQuote or Strategy Studio's TopQuote calculation.
-     */ 
-    virtual void OnDepth(const MarketDepthEventMsg& msg){}
-
-    /**
-     * This event triggers whenever a Bar interval completes for an instrument
-     */ 
     virtual void OnBar(const BarEventMsg& msg);
-
-    /**
-     * This event contains alerts about the state of the market
-     */
-    virtual void OnMarketState(const MarketStateEventMsg& msg){};
-
-    /**
-     * This event triggers whenever new information arrives about a strategy's orders
-     */ 
     virtual void OnOrderUpdate(const OrderUpdateEventMsg& msg);
-
-    /**
-     * This event contains strategy control commands arriving from the Strategy Studio client application (eg Strategy Manager)
-     */ 
-    virtual void OnStrategyControl(const StrategyStateControlEventMsg& msg){}
-
-    /**
-     *  Perform additional reset for strategy state 
-     */
     void OnResetStrategyState();
-
-    /**
-     * This event contains alerts about the status of a market data source
-     */ 
-    void OnDataSubscription(const DataSubscriptionEventMsg& msg){}
-
-    /**
-     * This event triggers whenever a custom strategy command is sent from the client
-     */ 
-    void OnStrategyCommand(const StrategyCommandEventMsg& msg);
-
-    /**
-     * Notifies strategy for every succesfull change in the value of a strategy parameter.
-     *
-     * Will be called any time a new parameter value passes validation, including during strategy initialization when default parameter values
-     * are set in the call to CreateParam and when any persisted values are loaded. Will also trigger after OnResetStrategyState
-     * to remind the strategy of the current parameter values.
-     */ 
     void OnParamChanged(StrategyParam& param);
 
-private: // Helper functions specific to this strategy
-    void AdjustPortfolio(const Instrument* instrument, int desired_position);
-    void SendOrder(const Instrument* instrument, int trade_size);
-    void RepriceAll();
-    void Reprice(Order* order);
+private:
+    void PlaceGridOrders(const Instrument* instrument);
+    void AdjustPortfolio(const Instrument* instrument, double current_price);
 
 private: /* from Strategy */
-    virtual void RegisterForStrategyEvents(StrategyEventRegister* eventRegister, DateType currDate); 
-    
-    /**
-     * Define any params for use by the strategy 
-     */     
+    virtual void RegisterForStrategyEvents(StrategyEventRegister* eventRegister, DateType currDate);
     virtual void DefineStrategyParams();
-
-    /**
-     * Define any strategy commands for use by the strategy
-     */ 
     virtual void DefineStrategyCommands();
 
 private:
-    boost::unordered_map<const Instrument*, Momentum> momentum_map_;
-    double aggressiveness_;
-    int position_size_;
-    int short_window_size_;
-    int long_window_size_;
+    boost::unordered_map<const Instrument*, Grid> grid_map_;
+    double grid_spacing_;
+    double upper_bound_;
+    double lower_bound_;
+    int order_size_;
     bool debug_;
 };
 
 extern "C" {
     _STRATEGY_EXPORTS const char* GetType()
     {
-        return "SimpleMomentumStrategy";
+        return "MarketKingGridStrategy";
     }
 
     _STRATEGY_EXPORTS IStrategy* CreateStrategy(const char* strategyType,
@@ -203,18 +89,18 @@ extern "C" {
                                    const char* strategyName,
                                    const char* groupName) {
         if (strcmp(strategyType, GetType()) == 0) {
-            return *(new SimpleMomentum(strategyID, strategyName, groupName));
+            return *(new MarketKingGrid(strategyID, strategyName, groupName));
         } else {
             return NULL;
         }
     }
 
     _STRATEGY_EXPORTS const char* GetAuthor() {
-        return "dlariviere";
+        return "YourName";
     }
 
     _STRATEGY_EXPORTS const char* GetAuthorGroup() {
-        return "UIUC";
+        return "YourGroup";
     }
 
     _STRATEGY_EXPORTS const char* GetReleaseVersion() {
