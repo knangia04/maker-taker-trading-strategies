@@ -15,15 +15,15 @@ INCLUDES=-I/usr/include -I../../../includes -I/home/vagrant/ss/sdk/RCM/StrategyS
 LDFLAGS=$(LIBPATH)/libstrategystudio_analytics.a $(LIBPATH)/libstrategystudio.a $(LIBPATH)/libstrategystudio_transport.a $(LIBPATH)/libstrategystudio_marketmodels.a $(LIBPATH)/libstrategystudio_utilities.a $(LIBPATH)/libstrategystudio_flashprotocol.a
 
 # Define the names of the library, source, and header files.
-LIBRARY=SimpleMomentumStrategy.so
-SOURCES=SimpleMomentumStrategy.cpp
-HEADERS=SimpleMomentumStrategy.h
+LIBRARY=GridStrategy.so
+SOURCES=GridStrategy.cpp
+HEADERS=GridStrategy.h
 
 OBJECTS=$(SOURCES:.cpp=.o)
 
 all: $(HEADERS) $(LIBRARY)
 
-$(LIBRARY) : $(OBJECTS)
+$(LIBRARY): $(OBJECTS)
 	$(CC) -shared -Wl,-soname,$(LIBRARY).1 -o $(LIBRARY) $(OBJECTS) $(LDFLAGS)
 	
 .cpp.o: $(HEADERS)
