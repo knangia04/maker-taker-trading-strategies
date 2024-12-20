@@ -29,12 +29,16 @@ This may take some time...alternatively you could use Miniconda3
 
 **Environment SetUp:**
 
+**Note: Assuming SS is already setup on your system and running under path: /home/vagrant/ss**
+
 Once you have Anaconda3 on your system and are inside the group02 repo, use the following command to setup the environment
 
 ```
 TODO: Once Project is completed export the yaml/yml inside the repo
 conda env create -f environment.yml
 ```
+
+Alterntatively use **pypy3** 
 
 ## Understanding the Codebase
 

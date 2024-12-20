@@ -42,11 +42,11 @@ using namespace std;
 
 SimpleMomentum::SimpleMomentum(StrategyID strategyID, const std::string& strategyName, const std::string& groupName):
     Strategy(strategyID, strategyName, groupName),
-    momentum_map_(),
+    momentum_map_(),    
     aggressiveness_(0),
     position_size_(100),
     debug_(false),
-    short_window_size_(10),
+    short_window_size_(9),
     long_window_size_(30)
 {
     //this->set_enabled_pre_open_data_flag(true);
@@ -82,7 +82,7 @@ void SimpleMomentum::DefineStrategyCommands()
 void SimpleMomentum::RegisterForStrategyEvents(StrategyEventRegister* eventRegister, DateType currDate)
 {    
     for (SymbolSetConstIter it = symbols_begin(); it != symbols_end(); ++it) {
-        eventRegister->RegisterForBars(*it, BAR_TYPE_TIME, 10);
+        eventRegister->RegisterForBars(*it, BAR_TYPE_TIME, 1);
     }
 }
 
@@ -145,12 +145,22 @@ void SimpleMomentum::SendOrder(const Instrument* instrument, int trade_size)
     OrderParams params(*instrument,
                        abs(trade_size),
                        price,
-                       (instrument->type() == INSTRUMENT_TYPE_EQUITY) ? MARKET_CENTER_ID_NASDAQ : ((instrument->type() == INSTRUMENT_TYPE_OPTION) ? MARKET_CENTER_ID_CBOE_OPTIONS : MARKET_CENTER_ID_CME_GLOBEX),
+                       MARKET_CENTER_ID_NASDAQ,
                        (trade_size > 0) ? ORDER_SIDE_BUY : ORDER_SIDE_SELL,
                        ORDER_TIF_DAY,
                        ORDER_TYPE_LIMIT);
 
-    trade_actions()->SendNewOrder(params);
+        // Print a message indicating that a new order is being sent
+        std::cout << "SendTradeOrder(): about to send new order for size "
+                << trade_size
+                << " at $"
+                << price
+                << " for symbol "
+                << instrument->symbol()
+                << std::endl;
+        
+        trade_actions()->SendNewOrder(params);
+
 }
 
 void SimpleMomentum::RepriceAll()

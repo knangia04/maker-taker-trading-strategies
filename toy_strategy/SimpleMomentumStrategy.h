@@ -38,6 +38,7 @@
 #include <MarketModels/Instrument.h>
 #include <Utilities/ParseConfig.h>
 
+
 #include <vector>
 #include <map>
 #include <iostream>
@@ -80,7 +81,10 @@ public:
 class SimpleMomentum : public Strategy {
 public:
     typedef boost::unordered_map<const Instrument*, Momentum> MomentumMap; 
-    typedef MomentumMap::iterator MomentumMapIterator;
+    // creates an unordered map where keys are instrument names and values are corresponding classes 
+    // all these pairs are set to a map called MomentumMap
+    typedef MomentumMap::iterator MomentumMapIterator; 
+    // we define an iterator that iterates through these key value pairs 
 
 public:
     SimpleMomentum(StrategyID strategyID, const std::string& strategyName, const std::string& groupName);
@@ -191,36 +195,29 @@ private:
 extern "C" {
     _STRATEGY_EXPORTS const char* GetType()
     {
-        return "SimpleMomentum";
+        return "SimpleMomentumStrategy";
     }
 
-    _STRATEGY_EXPORTS IStrategy* CreateStrategy(const char* strategyType, 
-                                   unsigned strategyID, 
+    _STRATEGY_EXPORTS IStrategy* CreateStrategy(const char* strategyType,
+                                   unsigned strategyID,
                                    const char* strategyName,
-                                   const char* groupName)
-    {
-        if (strcmp(strategyType,GetType()) == 0) {
+                                   const char* groupName) {
+        if (strcmp(strategyType, GetType()) == 0) {
             return *(new SimpleMomentum(strategyID, strategyName, groupName));
         } else {
-            return nullptr;
+            return NULL;
         }
     }
 
-     // must match an existing user within the system 
-    _STRATEGY_EXPORTS const char* GetAuthor()
-    {
+    _STRATEGY_EXPORTS const char* GetAuthor() {
         return "dlariviere";
     }
 
-    // must match an existing trading group within the system 
-    _STRATEGY_EXPORTS const char* GetAuthorGroup()
-    {
+    _STRATEGY_EXPORTS const char* GetAuthorGroup() {
         return "UIUC";
     }
 
-    // used to ensure the strategy was built against a version of the SDK compatible with the server version
-    _STRATEGY_EXPORTS const char* GetReleaseVersion()
-    {
+    _STRATEGY_EXPORTS const char* GetReleaseVersion() {
         return Strategy::release_version();
     }
 }

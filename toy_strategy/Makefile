@@ -1,4 +1,3 @@
-# Conditional settings based on passed in variables
 ifdef INTEL
     CC=icc
 else
@@ -12,15 +11,14 @@ else
 endif
 
 LIBPATH=/home/vagrant/ss/sdk/RCM/StrategyStudio/libs/x64/
-# INCLUDEPATH=../../../includes /home/vagrant/ss/sdk/RCM/StrategyStudio/includes
-
 INCLUDES=-I/usr/include -I../../../includes -I/home/vagrant/ss/sdk/RCM/StrategyStudio/includes
 LDFLAGS=$(LIBPATH)/libstrategystudio_analytics.a $(LIBPATH)/libstrategystudio.a $(LIBPATH)/libstrategystudio_transport.a $(LIBPATH)/libstrategystudio_marketmodels.a $(LIBPATH)/libstrategystudio_utilities.a $(LIBPATH)/libstrategystudio_flashprotocol.a
-LIBRARY=SimpleMomentumStrategy.so
 
+# Define the names of the library, source, and header files.
+LIBRARY=SimpleMomentumStrategy.so
 SOURCES=SimpleMomentumStrategy.cpp
 HEADERS=SimpleMomentumStrategy.h
- 
+
 OBJECTS=$(SOURCES:.cpp=.o)
 
 all: $(HEADERS) $(LIBRARY)

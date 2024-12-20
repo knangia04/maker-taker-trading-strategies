@@ -10,10 +10,11 @@ echo "Resource limits set."
 SO_FILE="SimpleMomentumStrategy.so"
 STRATEGY_NAME="SimpleMomentumStrategy"
 INSTANCE_NAME="Toy"
-ACCOUNT="UIUC"
+GROUP="UIUC"
+ACCOUNT="SIM-1001-101"
 USER="dlariviere"
 START_BALANCE=1000000
-SYMBOLS="AAPL,MSFT"
+SYMBOLS="AAPL|MSFT"
 START_DATE="2021-11-05"
 END_DATE="2021-11-05"
 LATENCY=10
@@ -59,7 +60,7 @@ echo "Terminating existing instance (if any)..."
 ./StrategyCommandLine cmd terminate "$INSTANCE_NAME"
 
 echo "Creating a new strategy instance..."
-./StrategyCommandLine cmd create_instance "$INSTANCE_NAME" "$STRATEGY_NAME" "$ACCOUNT" "$USER" "$START_BALANCE" -symbols "$SYMBOLS"
+./StrategyCommandLine cmd create_instance "$INSTANCE_NAME" "$STRATEGY_NAME" "$GROUP" "$ACCOUNT" "$USER" "$START_BALANCE" -symbols "$SYMBOLS"
 ./StrategyCommandLine cmd set_simulator_params -latency_to_exchange "$LATENCY"
 
 echo "Listing all strategy instances..."
