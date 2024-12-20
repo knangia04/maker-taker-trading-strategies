@@ -1,0 +1,19 @@
+import yfinance as yf
+
+def fetch_data(symbol, start, end):
+    data = yf.download(symbol, start=start, end=end)
+    data['Returns'] = data['Close'].pct_change()
+    return data
+def generate_dynamic_grid(price, atr, num_levels=10):
+    levels = [price + i * atr for i in range(-num_levels, num_levels + 1) if i != 0]
+    return sorted(levels)
+def generate_signals(data, grid_levels):
+    data['Signal'] = 0
+    data['Grid_Level'] = None
+    for i in range(1, len(data)):
+        price = data['Close'].iloc[i]
+        if price > max(grid_levels):
+            data.loc[i, 'Signal'] = -1
+        elif price < min(grid_levels):
+            data.loc[i, 'Signal'] = 1
+    return data
