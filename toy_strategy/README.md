@@ -1,35 +1,59 @@
-# Toy Strategy - SMA
+Grid Strategy - Build Instructions
 
-## About:
+This repository contains the implementation of the Grid Strategy, a trading strategy designed to execute orders across a predefined price grid. Below are the steps and details of the updated build process for this project, including the Makefile configuration.
 
-The goal of this strategy is to see if Strategy Studio is setup properly and if we can test our strategies as needed. 
+Updates to the Build Process
 
-**Note:** The Strategy here is the same as the example SMA strategy provided along with Strategy Studio, additional scripts developed execute it conveniently.
+The Makefile has been updated to compile the Grid Strategy library (GridStrategy.so) with the following enhancements:
 
-## Running:
+Key Features of the Makefile
+Compiler Selection:
+Uses the Intel C++ compiler (icc) if available, or defaults to g++.
+ifdef INTEL
+    CC=icc
+else
+    CC=g++
+endif
+Debug and Release Modes:
+The Makefile supports two modes:
+Debug: Adds debugging symbols with -g.
+Release: Optimized for performance with -O3.
+These modes are controlled by the DEBUG flag.
+ifdef DEBUG
+    CFLAGS=-c -g -fPIC -fpermissive -std=c++11
+else
+    CFLAGS=-c -fPIC -fpermissive -O3 -std=c++11
+endif
+Library Paths and Includes:
+The Makefile points to the Strategy Studio library paths and includes necessary headers.
+LIBPATH=/home/vagrant/ss/sdk/RCM/StrategyStudio/libs/x64/
+INCLUDES=-I/usr/include -I../../../includes -I/home/vagrant/ss/sdk/RCM/StrategyStudio/includes
+Build Artifacts:
+The final shared library is named GridStrategy.so.
+The source file (GridStrategy.cpp) and header file (GridStrategy.h) define the logic for the strategy.
+LIBRARY=GridStrategy.so
+SOURCES=GridStrategy.cpp
+HEADERS=GridStrategy.h
+Clean Target:
+A clean target is provided to remove compiled objects and the shared library.
+clean:
+    rm -rf *.o $(LIBRARY)
+Build Instructions
 
-*.h and .cpp files are the exact same as those in the examples dir of strategy studio, execute the bash script as shown below to test if everything works as expected*
+Clone the repository:
+git clone https://github.com/yourusername/GridStrategy.git
+cd GridStrategy
+Edit the Makefile as needed:
+Ensure the LIBPATH and INCLUDES are correct for your system.
+Build the library:
+make
+To clean up build artifacts:
+make clean
+Files Overview
 
-Modifications:
-1) Makefile: in order to ensure correct path
-2) LocalDevServer (if executing here):
-```
-touch cmd_config.txt
-```
-and fill file with:
+GridStrategy.cpp: Contains the implementation of the Grid Strategy logic.
+GridStrategy.h: Header file defining the interface for the strategy.
+Makefile: Automates the build process for the shared library.
+Example Usage
 
-```
-USERNAME=username
-PASSWORD=password
-SERVER=127.0.0.1
-PORT=13001
-#runmode: 1=Backtesting, 2=Live Simulation, 3=Production, 4=LocalDevelopment
-RUN_MODE=1
-```
-
-**Note:** Set to execute on the backtesting server and not the LocalDevServer
-
-```
-chmod +x run_strategy.sh
-./run_strategy.sh
-```
+The compiled GridStrategy.so can be integrated with Strategy Studio or other compatible systems for testing and execution.
