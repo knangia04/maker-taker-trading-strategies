@@ -15,8 +15,9 @@
   - Taker Demo Video
 
 - **[Asuthosh Anandaram ]**:
-  - Market Making Strategy ideation and helped with implementation
-  - Github cleanup and adding ReadMe sections for both srategies
+  - Market Taker Ideation and Cpp implementation
+  - Github cleanup
+  - Documeting taker and maker strategies
 
 - **[Krish Nagia]**:
   - Implementation and backtesting of Maker Strategy in Python using ipynb
