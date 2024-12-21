@@ -28,6 +28,7 @@ WORK_DIR=$PWD
 echo "Step 0: Cleaning and building the strategy..."
 BUILD_DIR="/home/vagrant/group_02_project/toy_strategy"  # Update this path
 cd "$BUILD_DIR" || { echo "Build directory not found! Exiting."; exit 1; }
+rm -rf output/
 make clean
 if make; then
     echo "Build successful!"

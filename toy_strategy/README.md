@@ -12,24 +12,13 @@ The goal of this strategy is to see if Strategy Studio is setup properly and if 
 
 Modifications:
 1) Makefile: in order to ensure correct path
-2) LocalDevServer (if executing here):
-```
-touch cmd_config.txt
-```
-and fill file with:
-
-```
-USERNAME=username
-PASSWORD=password
-SERVER=127.0.0.1
-PORT=13001
-#runmode: 1=Backtesting, 2=Live Simulation, 3=Production, 4=LocalDevelopment
-RUN_MODE=1
-```
-
-**Note:** Set to execute on the backtesting server and not the LocalDevServer
+2) Header Names in .h file
 
 ```
 chmod +x run_strategy.sh
 ./run_strategy.sh
 ```
+
+Once that is done, run the visualization tool to view the strategy, again since conda environment is already setup, just run the individual cells in **jupyer notebook**.
+
+___
