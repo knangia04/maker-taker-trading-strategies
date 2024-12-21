@@ -1,23 +1,3 @@
-/*================================================================================
-*     Source: ../RCM/StrategyStudio/examples/strategies/SMAReactiveTakerStrategy/SMAReactiveTakerStrategy.cpp
-*     Last Update: 2021/04/15 13:55:14
-*     Contents:
-*     Distribution:
-*
-*
-*     Copyright (c) RCM-X, 2011 - 2021.
-*     All rights reserved.
-*
-*     This software is part of Licensed material, which is the property of RCM-X ("Company"), 
-*     and constitutes Confidential Information of the Company.
-*     Unauthorized use, modification, duplication or distribution is strictly prohibited by Federal law.
-*     No title to or ownership of this software is hereby transferred.
-*
-*     The software is provided "as is", and in no event shall the Company or any of its affiliates or successors be liable for any 
-*     damages, including any lost profits or other incidental or consequential damages relating to the use of this software.       
-*     The Company makes no representations or warranties, express or implied, with regards to this software.                        
-/*================================================================================*/
-
 #ifdef _WIN32
     #include "stdafx.h"
 #endif
@@ -67,6 +47,12 @@ void SMAReactiveTakerStrategy::DefineStrategyParams()
     params().CreateParam(CreateStrategyParamArgs("debug", STRATEGY_PARAM_TYPE_RUNTIME, VALUE_TYPE_BOOL, debug_));
 }
 
+void SMAReactiveTakerStrategy::DefineStrategyCommands() {
+    // Define any commands your strategy needs. Example:
+    commands().AddCommand(StrategyCommand(1, "Reprice Existing Orders"));
+    commands().AddCommand(StrategyCommand(2, "Cancel All Orders"));
+}
+
 void SMAReactiveTakerStrategy::RegisterForStrategyEvents(StrategyEventRegister* eventRegister, DateType currDate)
 {    
     for (SymbolSetConstIter it = symbols_begin(); it != symbols_end(); ++it) {
@@ -108,6 +94,9 @@ void SMAReactiveTakerStrategy::OnBar(const BarEventMsg& msg)
 
         AdjustPortfolio(&msg.instrument(), position_size_ * side);
     }
+}
+
+void SMAReactiveTakerStrategy::OnOrderUpdate(const OrderUpdateEventMsg& msg) {
 }
 
 void SMAReactiveTakerStrategy::AdjustPortfolio(const Instrument* instrument, int desired_position)
@@ -155,6 +144,35 @@ void SMAReactiveTakerStrategy::SendOrder(const Instrument* instrument, int trade
             << std::endl;
 
     trade_actions()->SendNewOrder(params);
+}
+
+void SMAReactiveTakerStrategy::RepriceAll()
+{
+    for (IOrderTracker::WorkingOrdersConstIter ordit = orders().working_orders_begin(); ordit != orders().working_orders_end(); ++ordit) {
+        Reprice(*ordit);
+    }
+}
+
+void SMAReactiveTakerStrategy::Reprice(Order* order)
+{
+    OrderParams params = order->params();
+    params.price = (order->order_side() == ORDER_SIDE_BUY) ? order->instrument()->top_quote().bid() + aggressiveness_ : order->instrument()->top_quote().ask() - aggressiveness_;
+    trade_actions()->SendCancelReplaceOrder(order->order_id(), params);
+}
+
+void SMAReactiveTakerStrategy::OnStrategyCommand(const StrategyCommandEventMsg& msg)
+{
+    switch (msg.command_id()) {
+        case 1:
+            RepriceAll();
+            break;
+        case 2:
+            trade_actions()->SendCancelAll();
+            break;
+        default:
+            logger().LogToClient(LOGLEVEL_DEBUG, "Unknown strategy command received");
+            break;
+    }
 }
 
 void SMAReactiveTakerStrategy::OnParamChanged(StrategyParam& param)
