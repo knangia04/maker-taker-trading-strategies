@@ -3,7 +3,7 @@
 
 - **[Khushi Kalra]**:
   - Implementation and backtesting of Maker Strategy in Python using ipynb
-  -Implementation of Maker Strategy in Cpp using Strategy Studio
+  - Implementation of Maker Strategy in Cpp using Strategy Studio
   - Final Project Report
 
 - **[Siddarth Ananath]**:
