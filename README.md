@@ -5,14 +5,12 @@
 ### Summary:
 
 #### Taker Strategy Overview:
-
 This strategy uses a 100-day Simple Moving Average (SMA) to identify support and resistance levels for trading SPY (S&P 500 ETF).
 Buy Signal: Triggered when the price stays above the SMA for two consecutive days with upward momentum.
 Sell Signal: Triggered when the price stays below the SMA for two consecutive days with downward momentum.
 Currently, the strategy uses all available capital for trades, but future improvements will incorporate risk management techniques like the Kelly Criterion. Initial testing was done in Jupyter Notebook, followed by rigorously backtest in Strategy Studio.
 
 #### Maker Strategy Overview: 
-
 Market-making strategies aim to provide liquidity to financial markets while profiting from bid-ask spreads and price fluctuations. One of the most popular approaches in this domain is grid trading, which excels in highly volatile, range-bound markets. By creating a "grid" of predefined buy and sell orders around the current price, the strategy systematically captures profits as prices oscillate between these levels.
 Grid trading differs from trend-following strategies by focusing on market fluctuations rather than directional predictions. This makes it particularly effective in environments like SPY (S&P 500 ETF), where prices often move within a stable range.
 
@@ -72,7 +70,6 @@ Balancing my academic research with practical experience, I've also worked as a 
 
 **About Me:**
 
-    Asuthosh Anandaram (aa69@illinois.edu) :
 Asuthosh, a senior at the University of Illinois at Urbana-Champaign, is set to graduate in 2025 with a major in Computer Engineering from the Grainger College of Engineering. He has a strong passion for systems programming, operating system design, and kernel development. His experience includes developing a custom real-time static and dynamic scheduler, a virtual memory page fault profiler, a Linux-based operating system, and an eBPF kernel module using Rust. Currently, he is diving into Windows kernel programming, further honing his expertise in low-level system development.
 Asuthosh has extensive experience working with eBPF (Extended Berkeley Packet Filter), leveraging it for efficient and scalable performance monitoring and security analysis. He has designed and implemented custom eBPF programs for tracing, packet filtering, and network traffic analysis.
 
