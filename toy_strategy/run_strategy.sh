@@ -14,7 +14,7 @@ GROUP="UIUC"
 ACCOUNT="SIM-1001-101"
 USER="dlariviere"
 START_BALANCE=1000000
-SYMBOLS="AAPL|MSFT"
+SYMBOLS="MSFT"
 START_DATE="2021-11-05"
 END_DATE="2021-11-05"
 LATENCY=10
@@ -44,7 +44,24 @@ cp "$SO_FILE" "$DLLS_DIR/"
 echo "Step 1 completed."
 
 # Step 2: Start the Strategy Server
-echo "Step 2: Starting the Strategy Server..."
+echo "Step 2: Starting the Strategy Server...(closing existing servers and command lines)"
+
+cd /home/vagrant/ss/bt/utilities; ./StrategyCommandLine cmd quit
+sleep 5
+
+# Kill any running StrategyServerBacktesting process
+echo "Checking for existing StrategyServerBacktesting process..."
+EXISTING_PID=$(pgrep StrategyServerBacktesting)
+if [ -n "$EXISTING_PID" ]; then
+    echo "Found existing process with PID $EXISTING_PID. Terminating..."
+    kill -9 "$EXISTING_PID"
+    sleep 5  # Allow time for the process to terminate
+    echo "Existing process terminated."
+else
+    echo "No existing process found."
+fi
+
+# Navigate to the base directory and start the server
 cd "$BASE_DIR" || { echo "LocalDevServer directory not found! Exiting."; exit 1; }
 ./StrategyServerBacktesting &
 SERVER_PID=$!
@@ -86,14 +103,25 @@ echo "Step 4 completed."
 
 # Step 5: Export results
 echo "Step 5: Exporting CRA file to CSV..."
-latestCRA=$(ls "$BASE_DIR/backtesting-results/BACK_*.cra" -t | head -n1)
-echo "Latest CRA file: $latestCRA"
 
+# Match and retrieve the latest CRA file
+latestCRA=$(ls -t /home/vagrant/ss/bt/backtesting-results/BACK_*.cra 2>/dev/null | head -n1)
+
+# Debugging: Print the detected file
+echo "Detected CRA file: $latestCRA"
+
+# Handle the case where no CRA file is found
+if [ -z "$latestCRA" ]; then
+    echo "Error: No CRA file found in /home/vagrant/ss/bt/backtesting-results/"
+    exit 1
+fi
+
+# Export the CRA file to CSV
 ./StrategyCommandLine cmd export_cra_file "$latestCRA" "$OUTPUT_DIR"
 echo "CRA file exported to $OUTPUT_DIR."
 
-# Move CSV files to output directory
-echo "Moving CSV files to output directory..."
+# Move CSV files to the output directory
+echo "Moving CSV files to the output directory..."
 mkdir -p "$WORK_DIR/output"
 mv "$OUTPUT_DIR"/* "$WORK_DIR/output/"
 rm "$latestCRA"
@@ -101,7 +129,7 @@ echo "Step 5 completed."
 
 # Step 6: Terminate the Strategy Server
 echo "Step 6: Terminating the Strategy Server..."
-kill $SERVER_PID
+kill -9 $SERVER_PID
 echo "Strategy Server terminated."
 echo "Step 6 completed."
 
