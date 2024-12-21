@@ -40,8 +40,6 @@ conda env create -f environment.yml
 
 Alterntatively use **pypy3** 
 
-## Understanding the Codebase
-
 ## Teammates
 
 ### Siddarth Aananth

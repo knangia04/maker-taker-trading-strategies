@@ -24,6 +24,13 @@ This strategy uses the Simple Moving Average (SMA) as a dynamic indicator to ide
 #### Jupyter Notebook:
 Once the environment is setup and activated, the necessary dependencies should already be ready to use. Just run each cell, and change code as required for additional testing.
 
-#### Strategy Studio BackTest: TODO:
+#### Strategy Studio BackTest:
+
+```
+chmod +x run_strategy.sh
+./run_strategy.sh
+```
+
+Then visualize the output using the scripts in the **jupyter notebook** for result_visualization
 
 ___
