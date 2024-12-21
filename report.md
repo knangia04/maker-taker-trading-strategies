@@ -5,10 +5,14 @@
   - Wrote initial code for the backtesting framework, allowing historical data to be analyzed in C++for the Market Making Strategy.
   - Final Project Report
 
-- **[Siddharth Ananath]**:
-  - Wrote initial code for the backtesting framework, allowing historical data to be analyzed in C++for the Market Taking Strategy.
-  - Demo Video
-  
+- **[Siddarth Ananath]**:
+  - Initial Setup
+  - Toy Strategy
+  - Developed scripts for: result_visualization (SS output), bash scripts for automating backtests (run_strategy.sh) to simplify tasks across repo
+  - Implementation and backtesting of Taker Strategy in Python using ipynb
+  - Implementation and backtesting of Taker Strategy in Cpp using Strategy Studio
+  - Github ReadMe's
+  - Taker Demo Video
 
 - **[Asuthosh Anandaram ]**:
   - Worked on the python code for the Market Taking Strategy
