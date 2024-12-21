@@ -32,58 +32,18 @@
 #endif
 
 #include <Strategy.h>
-#include <Analytics/ScalarRollingWindow.h>
 #include <MarketModels/Instrument.h>
-#include <Utilities/ParseConfig.h>
-
-#include <vector>
-#include <map>
-#include <iostream>
+#include <set>
 
 using namespace RCM::StrategyStudio;
-
-class GridStrategyGrid {
-public:
-    GridStrategyGrid(double grid_interval = 0.5, int max_position = 100) 
-        : grid_interval_(grid_interval), max_position_(max_position) {}
-
-    void Reset() {
-        active_orders_.clear();
-    }
-
-    void Update(double price) {
-        current_price_ = price;
-    }
-
-    double NextGridLevelUp() const {
-        return current_price_ + grid_interval_;
-    }
-
-    double NextGridLevelDown() const {
-        return current_price_ - grid_interval_;
-    }
-
-    int GetMaxPosition() const {
-        return max_position_;
-    }
-
-private:
-    double grid_interval_;
-    double current_price_;
-    int max_position_;
-    std::vector<double> active_orders_;
-};
+using namespace RCM::StrategyStudio::MarketModels;
 
 class GridStrategy : public Strategy {
-public:
-    typedef boost::unordered_map<const Instrument*, GridStrategyGrid> GridMap;
-    typedef GridMap::iterator GridMapIterator;
-
 public:
     GridStrategy(StrategyID strategyID, const std::string& strategyName, const std::string& groupName);
     ~GridStrategy();
 
-public: /* from IEventCallback */
+public: // Strategy Events
     virtual void OnTrade(const TradeDataEventMsg& msg) {}
     virtual void OnTopQuote(const QuoteEventMsg& msg) {}
     virtual void OnQuote(const QuoteEventMsg& msg) {}
@@ -92,25 +52,29 @@ public: /* from IEventCallback */
     virtual void OnMarketState(const MarketStateEventMsg& msg) {}
     virtual void OnOrderUpdate(const OrderUpdateEventMsg& msg);
     virtual void OnStrategyControl(const StrategyStateControlEventMsg& msg) {}
-    void OnResetStrategyState();
-    void OnDataSubscription(const DataSubscriptionEventMsg& msg) {}
-    void OnStrategyCommand(const StrategyCommandEventMsg& msg);
-    void OnParamChanged(StrategyParam& param);
+    virtual void OnResetStrategyState();
+    virtual void OnDataSubscription(const DataSubscriptionEventMsg& msg) {}
+    virtual void OnStrategyCommand(const StrategyCommandEventMsg& msg);
+    virtual void OnParamChanged(StrategyParam& param);
 
-private: // Helper functions specific to this strategy
-    void AdjustGrid(const Instrument* instrument);
-    void PlaceGridOrders(const Instrument* instrument);
+private: // Helper functions
+void AdjustGridOrders(const Instrument* instrument, double current_price);
+    bool HasActiveOrder(const Instrument* instrument, OrderSide side, double price);
+    void SendOrder(const Instrument* instrument, OrderSide side, int size, double price);
+    void RepriceAll();
+    void Reprice(Order* order);
 
-private: /* from Strategy */
+private: // Strategy interface implementation
     virtual void RegisterForStrategyEvents(StrategyEventRegister* eventRegister, DateType currDate);
     virtual void DefineStrategyParams();
     virtual void DefineStrategyCommands();
 
-private:
-    GridMap grid_map_;
-    double grid_interval_;
-    int max_position_;
+private: // Member variables
+    double grid_spacing_;
+    int position_size_;
     bool debug_;
+    double aggressiveness_;  // Added to match Reprice() implementation
+    std::set<OrderID> active_orders_;
 };
 
 extern "C" {
@@ -119,14 +83,13 @@ extern "C" {
     }
 
     _STRATEGY_EXPORTS IStrategy* CreateStrategy(const char* strategyType,
-                                   unsigned strategyID,
-                                   const char* strategyName,
-                                   const char* groupName) {
+                                              unsigned strategyID,
+                                              const char* strategyName,
+                                              const char* groupName) {
         if (strcmp(strategyType, GetType()) == 0) {
-            return *(new GridStrategy(strategyID, strategyName, groupName));
-        } else {
-            return NULL;
+            return new GridStrategy(strategyID, strategyName, groupName);
         }
+        return nullptr;
     }
 
     _STRATEGY_EXPORTS const char* GetAuthor() {
