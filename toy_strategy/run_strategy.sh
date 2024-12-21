@@ -14,9 +14,10 @@ GROUP="UIUC"
 ACCOUNT="SIM-1001-101"
 USER="dlariviere"
 START_BALANCE=1000000
+# SYMBOLS="MSFT|AAPL|AMZN|AXP|BA|CAT|CRM|CSCO|CVX|DIA|DIS|DOW|GS|HD|HON|IBM"
 SYMBOLS="MSFT"
 START_DATE="2021-11-05"
-END_DATE="2021-11-05"
+END_DATE="2021-11-19"
 LATENCY=10
 BASE_DIR="/home/vagrant/ss/bt"
 DLLS_DIR="$BASE_DIR/strategies_dlls"
@@ -87,6 +88,8 @@ echo "Step 3 completed."
 
 # Step 4: Start backtest
 echo "Step 4: Starting the backtest..."
+echo "Start Date: $START_DATE"
+echo "End Date: $END_DATE"
 logFileNumLines=$(cat "$LOG_FILE" | wc -l)
 foundFinishedLogFile=$(grep -nr "finished.$" "$LOG_FILE" | gawk '{print $1}' FS=":" | tail -n1)
 

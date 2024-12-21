@@ -2,7 +2,7 @@
 
 ## About:
 
-The goal of this strategy is to see if Strategy Studio is setup properly and if we can test our strategies as needed. 
+The goal of this strategy is to see if Strategy Studio is setup properly and if we can test our strategies as needed. In addition to that I have used it to helpo me develop helper scripts to automate the process.
 
 **Note:** The Strategy here is the same as the example SMA strategy provided along with Strategy Studio, additional scripts developed execute it conveniently.
 
