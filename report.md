@@ -16,7 +16,7 @@
 
 - **[Asuthosh Anandaram ]**:
   - Market Taker Ideation and Cpp implementation
-  - Github cleanup
+  - Github cleanup + ReadMe's
   - Documeting taker and maker strategies
 
 - **[Krish Nagia]**:
