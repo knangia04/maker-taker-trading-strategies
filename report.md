@@ -1,3 +1,23 @@
+# Final Report
+### Team Members and Their Contributions
+
+- **[Khushi Kalra]**:
+  - Wrote initial code for the backtesting framework, allowing historical data to be analyzed in C++for the Market Making Strategy.
+  - Final Project Report
+
+- **[Soddharth Ananath]**:
+  - Wrote initial code for the backtesting framework, allowing historical data to be analyzed in C++for the Market Taking Strategy.
+  - Demo Video
+  
+
+- **[Asuthosh Anandaram ]**:
+  - Worked on the python code for the Market Taking Strategy
+  - Github cleanup and adding ReadMe sections for both srategies
+
+- **[Krish Nagia]**:
+  - Worked on the python code for the Grid Strategy
+
+
 # SMA (Simple Moving Averages) Based Reactive Taker Strategy
 
 ## Abstract
@@ -102,51 +122,53 @@ Future developments will explore ways to enhance the momentum filtering process 
 
 In the world of automated trading, one of the most popular and robust strategies is **grid trading**. Grid trading involves placing buy and sell orders at predefined intervals above and below the current market price, creating a "grid" of orders that capitalize on market fluctuations. This strategy is particularly useful in markets characterized by high volatility, where prices oscillate within a range rather than trend in one direction.
 
-This report provides a detailed overview of a **grid trading strategy** designed for use in volatile markets. The strategy aims to capture profits from price fluctuations within a defined range, minimizing the risk of major losses while profiting from frequent market moves. The report covers the basic concept, execution, and performance evaluation of the strategy.
+The grid trading strategy doesn't require advanced market predictions. Instead, it assumes that price will fluctuate in a relatively stable range over time. By placing both buy and sell orders, the strategy aims to profit from these oscillations as the market moves up and down, filling orders at regular intervals.
 
-## 2. Strategy Overview
+## 2. Objective
 
-### 2.1. Grid Trading Concept
+The objective of this project is to implement and backtest a **grid trading strategy** on SPY (S&P 500 ETF) using historical data. This strategy places buy and sell orders at set intervals, creating a grid that captures market oscillations and profits from price fluctuations within a given range. The backtesting process will simulate real-market trading, providing insights into the performance and robustness of the strategy.
 
-The **grid trading strategy** is based on the idea of placing buy and sell orders at regular intervals above and below the current market price. The strategy is designed to capture profits from price fluctuations within a predefined range. It operates best in sideways or ranging markets, where the price oscillates between support and resistance levels, creating opportunities for multiple trades.
+## 3. Strategy Overview
 
-In grid trading, orders are placed ahead of time, ensuring that trades are executed automatically when the price hits the designated levels. The trader profits from both upward and downward price movements as positions are opened and closed within the grid levels.
+The **Grid Trading Strategy** operates by defining a grid of buy and sell orders around the current market price. The key components of this strategy include:
 
-### 2.2. Key Components
+- **Grid Size**: The distance between buy and sell orders. This distance is measured in points or percentage terms and determines the width of the grid.
+- **Number of Orders**: The total number of buy and sell orders placed in the grid.
+- **Order Size**: The amount of SPY purchased or sold per order. This can be constant or dynamically adjusted based on account balance or risk parameters.
 
-The main components of a grid trading strategy include:
+### Key Assumptions
 
-1. **Grid Size**: The distance between each buy and sell order in the grid. For example, a grid size of 50 pips would place orders every 50 pips above and below the current market price.
-2. **Grid Depth**: The total number of grid levels that are placed above and below the market price. A greater depth allows for more trading opportunities but increases exposure to larger price moves.
-3. **Position Sizing**: The amount of capital allocated to each order in the grid. Position sizing can be fixed or variable, with some strategies increasing the position size at each level as the market moves.
-4. **Buy and Sell Orders**: Orders are placed at predefined levels above and below the current market price. The strategy executes trades automatically as the price moves through these levels.
+- **Market Oscillation**: The strategy assumes that the market price will oscillate within a range over time, making it suitable for sideways or range-bound markets.
+- **Profit from Reversals**: The goal is to profit from price reversals by capturing small price movements up and down within the grid.
 
-### 2.3. Strategy Execution
+### Trade Execution
+1. **Buy Orders**: Buy orders are placed at intervals below the current market price.
+2. **Sell Orders**: Sell orders are placed at intervals above the current market price.
+3. **Order Refill**: Once an order is filled, it is immediately replaced with a new order at the next interval, keeping the grid intact.
 
-The implementation of the grid trading strategy involves the following steps:
+## 4. Backtesting Process
 
-1. **Initialization**: The strategy starts by identifying the current market price and calculating the grid levels based on predefined intervals.
-2. **Order Placement**: Buy and sell limit orders are placed at regular intervals above and below the current price, creating a grid of orders. These orders are designed to be executed as the market price fluctuates.
-3. **Order Execution**: When the market price reaches a grid level, the corresponding buy or sell order is executed, opening a new position. The strategy then looks for opportunities to close positions once the price reaches a predefined target or if the price moves back in the opposite direction.
+The backtesting process involves testing the grid trading strategy against historical SPY data to evaluate its effectiveness. The following steps were taken to implement the backtest:
 
-### 2.4. Risk Management
+1. **Data Collection**: Historical SPY data (price and volume) for a specific period was collected.
+2. **Grid Setup**: The grid size and number of orders were defined.
+3. **Order Execution**: Simulated orders were placed at predefined intervals based on market movements.
+4. **Performance Evaluation**: Key metrics such as total return, maximum drawdown, and win rate were calculated.
 
-To ensure the strategy operates efficiently and with minimal risk, **risk management techniques** are applied:
-1. **Stop-Loss Orders**: A stop-loss order may be placed at certain grid levels to limit potential losses. For example, a stop-loss order could be placed at a level where the price moves against the position by a predetermined amount.
-2. **Take-Profit Orders**: A take-profit order is used to close positions at predefined profit levels, locking in profits when the price moves in the trader's favor.
-3. **Position Closing**: In some variations of the strategy, positions may be closed once a predetermined profit threshold has been reached, effectively locking in profits and protecting against market reversals.
+## 5. Performance Metrics
 
-## 3. Performance Evaluation
+The performance of the grid trading strategy was evaluated using the following metrics:
 
-The grid trading strategy was tested on a selection of asset pairs to evaluate its effectiveness under different market conditions. The strategy's performance was assessed based on the following key metrics:
+- **Total Return**: The overall return generated by the strategy over the test period.
+- **Maximum Drawdown**: The largest peak-to-trough loss during the testing period.
+- **Win Rate**: The percentage of trades that resulted in a profit.
 
-1. **Profitability**: The total return generated by the strategy over a specified period.
-2. **Risk-Adjusted Return**: Metrics such as the **Sharpe Ratio** and **Sortino Ratio** were used to evaluate the strategy's return relative to its risk.
-3. **Drawdown**: The maximum loss from a peak to a trough, which indicates the level of risk exposure for the strategy.
-4. **Win Rate**: The percentage of profitable trades relative to the total number of trades executed.
+## 6. Results and Discussion
 
-## 4. Conclusion
+The results of the backtest indicate that the grid trading strategy performs well in a range-bound market with consistent oscillations. However, the strategy's performance is sensitive to the choice of grid size and the volatility of the market during the testing period. Larger grid sizes tend to perform better during high-volatility periods, while smaller grid sizes are more suited for low-volatility, range-bound markets.
 
-The **grid trading strategy** is a versatile and efficient method for profiting from price fluctuations in sideways or volatile markets. Its systematic nature allows for fully automated trading, making it an attractive option for traders seeking a hands-off approach. While the strategy works well in range-bound markets, it is crucial to consider risk management techniques to prevent significant losses in trending markets.
+## 7. Conclusion
 
-Future work on the grid trading strategy will focus on refining the grid size and depth, implementing dynamic risk management features, and testing the strategy across a broader range of market conditions.
+The **Grid Trading Strategy** offers a straightforward approach to capitalizing on market oscillations. It works best in range-bound markets where prices are expected to fluctuate within a defined range. However, its performance can be highly sensitive to market volatility, and proper grid size selection is crucial to its success.
+
+Future work will focus on optimizing the grid size, improving risk management techniques, and integrating advanced technical indicators to refine the grid trading strategy. Further backtesting across various market conditions will also be necessary to assess the robustness and adaptability of the strategy.
