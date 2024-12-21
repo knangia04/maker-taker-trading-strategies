@@ -6,7 +6,13 @@
 
 #### Taker Strategy Overview:
 
-#### Maker Strategy Overview:
+This strategy uses a 100-day Simple Moving Average (SMA) to identify support and resistance levels for trading SPY (S&P 500 ETF).
+
+Buy Signal: Triggered when the price stays above the SMA for two consecutive days with upward momentum.
+Sell Signal: Triggered when the price stays below the SMA for two consecutive days with downward momentum.
+Currently, the strategy uses all available capital for trades, but future improvements will incorporate risk management techniques like the Kelly Criterion. Initial testing was done in Jupyter Notebook, followed by rigorously backtest in Strategy Studio.
+
+#### Maker Strategy Overview: 
 
 ## Getting Started and System Setup
 
@@ -63,6 +69,12 @@ Balancing my academic research with practical experience, I've also worked as a 
 ### Asuthosh Anandaram 
 
 **About Me:**
+
+    Asuthosh Anandaram (aa69@illinois.edu) :
+Asuthosh, a senior at the University of Illinois at Urbana-Champaign, is set to graduate in 2025 with a major in Computer Engineering from the Grainger College of Engineering. He has a strong passion for systems programming, operating system design, and kernel development. His experience includes developing a custom real-time static and dynamic scheduler, a virtual memory page fault profiler, a Linux-based operating system, and an eBPF kernel module using Rust. Currently, he is diving into Windows kernel programming, further honing his expertise in low-level system development.
+Asuthosh has extensive experience working with eBPF (Extended Berkeley Packet Filter), leveraging it for efficient and scalable performance monitoring and security analysis. He has designed and implemented custom eBPF programs for tracing, packet filtering, and network traffic analysis.
+
+
 
 **LinkedIn:**
 
