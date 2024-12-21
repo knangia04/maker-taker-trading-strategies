@@ -89,7 +89,7 @@ void GridStrategy::AdjustGridOrders(const Instrument* instrument, double current
 bool GridStrategy::HasActiveOrder(const Instrument* instrument, OrderSide side, double price)
 {
     for (const auto& order : active_orders_) {
-        if (order.instrument() == instrument && order.order_side() == side && fabs(order.params().price - price) < 1e-6) {
+        if (order->instrument() == instrument && order->order_side() == side && fabs(order.params().price - price) < 1e-6) {
             return true;
         }
     }
@@ -113,12 +113,9 @@ void GridStrategy::SendOrder(const Instrument* instrument, OrderSide side, int s
 
 void GridStrategy::OnOrderUpdate(const OrderUpdateEventMsg& msg)
 {
-    if (msg.status() == ORDER_STATUS_FILLED) {
-        active_orders_.erase(msg.order_id());
-    } else if (msg.status() == ORDER_STATUS_WORKING) {
-        active_orders_.insert(msg.order_id());
-    }
+
 }
+
 
 
 void GridStrategy::RepriceAll()

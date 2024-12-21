@@ -87,7 +87,7 @@ extern "C" {
                                               const char* strategyName,
                                               const char* groupName) {
         if (strcmp(strategyType, GetType()) == 0) {
-            return new GridStrategy(strategyID, strategyName, groupName);
+            return *(new GridStrategy(strategyID, strategyName, groupName));
         }
         return nullptr;
     }
