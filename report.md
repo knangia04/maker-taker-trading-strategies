@@ -5,7 +5,7 @@
   - Wrote initial code for the backtesting framework, allowing historical data to be analyzed in C++for the Market Making Strategy.
   - Final Project Report
 
-- **[Soddharth Ananath]**:
+- **[Siddharth Ananath]**:
   - Wrote initial code for the backtesting framework, allowing historical data to be analyzed in C++for the Market Taking Strategy.
   - Demo Video
   
