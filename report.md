@@ -2,7 +2,7 @@
 ### Team Members and Their Contributions
 
 - **[Khushi Kalra]**:
-  - Implementation and backtesting of Maker Strategy in Python using ipynb
+  - Implementation of Maker Strategy in Python using ipynb
   - Implementation of Maker Strategy in Cpp 
   - Final Project Report
 
@@ -20,9 +20,11 @@
   - Github cleanup + ReadMe's
   - Documeting taker and maker strategies
 
-- **[Krish Nagia]**:
-  - Implementation and backtesting of Maker Strategy in Python using ipynb
-  - Implementation and backtesting of Maker Strategy in Cpp using Strategy Studio
+- **[Krish Nangia]**:
+  - Maker Strategy Ideation
+  - Implementation and succesful backtesting of Maker Strategy in Python using ipynb
+  - Implementation and (attempted) backtesting of Maker Strategy in Cpp using Strategy Studio
+  - Maker Demo Video
 
 
 # SMA (Simple Moving Averages) Based Reactive Taker Strategy
