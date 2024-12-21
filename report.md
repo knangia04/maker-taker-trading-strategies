@@ -2,7 +2,7 @@
 ### Team Members and Their Contributions
 
 - **[Khushi Kalra]**:
-  - Wrote initial code for the backtesting framework, allowing historical data to be analyzed in C++for the Market Making Strategy.
+  - Implementation and backtesting of Maker Strategy in Python using ipynb
   - Final Project Report
 
 - **[Siddarth Ananath]**:
@@ -15,11 +15,12 @@
   - Taker Demo Video
 
 - **[Asuthosh Anandaram ]**:
-  - Worked on the python code for the Market Taking Strategy
+  - Market Making Strategy ideation and helped with implementation
   - Github cleanup and adding ReadMe sections for both srategies
 
 - **[Krish Nagia]**:
-  - Worked on the python code for the Grid Strategy
+  - Implementation and backtesting of Maker Strategy in Python using ipynb
+  - Implementation and backtesting of Maker Strategy in Cpp using Strategy Studio
 
 
 # SMA (Simple Moving Averages) Based Reactive Taker Strategy
