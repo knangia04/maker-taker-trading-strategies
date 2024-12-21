@@ -7,14 +7,13 @@ ulimit -v $((6 * 1024 * 1024))  # Memory limit: 6GB
 echo "Resource limits set."
 
 # Configuration variables
-SO_FILE="SimpleMomentumStrategy.so"
-STRATEGY_NAME="SimpleMomentumStrategy"
-INSTANCE_NAME="Toy"
+SO_FILE="SMAReactiveTakerStrategy.so"
+STRATEGY_NAME="SMAReactiveTakerStrategy"
+INSTANCE_NAME="Taker"
 GROUP="UIUC"
 ACCOUNT="SIM-1001-101"
 USER="dlariviere"
 START_BALANCE=1000000
-# SYMBOLS="MSFT|AAPL|AMZN|AXP|BA|CAT|CRM|CSCO|CVX|DIA|DIS|DOW|GS|HD|HON|IBM"
 SYMBOLS="MSFT"
 START_DATE="2021-11-05"
 END_DATE="2021-11-05"
@@ -27,7 +26,7 @@ WORK_DIR=$PWD
 
 # Step 0: Build the .so file
 echo "Step 0: Cleaning and building the strategy..."
-BUILD_DIR="/home/vagrant/group_02_project/toy_strategy"  # Update this path
+BUILD_DIR="/home/vagrant/group_02_project/SMA_Reactive_Taker_Strategy"
 cd "$BUILD_DIR" || { echo "Build directory not found! Exiting."; exit 1; }
 rm -rf output/
 make clean
