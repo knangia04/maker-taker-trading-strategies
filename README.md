@@ -89,11 +89,15 @@ Asuthosh has extensive experience working with eBPF (Extended Berkeley Packet Fi
 
 ### Krish Nangia
 
-**About Me:**
+**About Me:** Hello, my name is Krish Nangia, and I am currently an undergraduate junior majoring in Computer Engineering at the Univesity of Illinois at Urbana-Champaign, with an expected graduation date of December 2025. I am a driven student with a diverse background in machine learning, data science, and software engineering. My experience spans various industries, including insurance, agriculture, and renewable energy, where I’ve delivered impactful projects, such as deploying scalable LLM solutions, creating time-series forecasting models, and developing IoT-based tools. 
 
-**LinkedIn:**
+My technical toolkit includes proficiency in programming languages such as Java, Python, C, C++, and more. I have explored the world of machine learning with frameworks like TensorFlow, PyTorch, and Scikit-Learn, and also have harnessed the power of data science libraries like Pandas, Matplotlib, and Numpy. Additionally, I have knowledge in SQL and web frameworks like Flask.
 
-**Other:**
+​I am very passionate about leveraging technology for the betterment of today's society. I hope to explore different aspects of software development and data science/analytics to ultimately use the skills gained to help further advance technology in other fields.
+
+**LinkedIn:** https://www.linkedin.com/in/krish-nangia-uiuc
+
+**Other:** https://www.github.com/knangia04
 
 ___
 
