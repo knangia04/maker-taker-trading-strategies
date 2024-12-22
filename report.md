@@ -3,8 +3,8 @@
 
 - **[Khushi Kalra]**:
   - Maker Strategy Ideation
-  - Implementation of Maker Strategy in Python using ipynb
-  - Implementation of Maker Strategy in Cpp 
+  - Initial implementation of Maker Strategy in Python using ipynb
+  - Initial implementation of Maker Strategy in Cpp 
   - Toy Strategy for Maker
   - Final Project Report
 
@@ -27,9 +27,11 @@
 
 - **[Krish Nangia]**:
   - Maker Strategy Ideation
-  - Implementation and succesful backtesting of Maker Strategy in Python using ipynb
-  - Implementation and (attempted) backtesting of Maker Strategy in Cpp using Strategy Studio
-  - Maker Demo Video
+  - Implementation, simplification, and succesful backtesting of Maker Strategy in Python using ipynb
+  - Implementation, debugging, and (attempted) backtesting of Maker Strategy in Cpp using Strategy Studio
+  - Maker Demo Video with code explanation
+  - Github ReadMe
+  - Backtesting Analysis on Final Project Report
 
 
 # SMA (Simple Moving Averages) Based Reactive Taker Strategy
@@ -293,6 +295,15 @@ This mechanism ensures that the portfolio continuously rebalances to exploit pri
 - **Total Return**: \(-2.83\%\).
 - **Sharpe Ratio**: \(-0.45\).
 - **Maximum Drawdown**: \(-2.88\%\).
+
+#### **Backtesting Results Analysis**
+
+1. The closing prices of SPY show an overall upward trend from 2020 to 2023, with some volatility.
+2. The grid trading strategy's positions fluctuate between short and long positions, responding to price movements.
+3. The portfolio value shows a significant decline, especially in the latter half of 2023.
+4. The strategy appears to have underperformed, as evidenced by the negative total return and declining portfolio value.
+5. The large negative positions towards the end suggest the strategy may be taking on excessive risk.
+6. The strategy might benefit from additional risk management measures or parameter optimization.
 
 ![maker](output/maker.png)
 
