@@ -284,7 +284,7 @@ The C++ implementation sought to:
 3. **Portfolio Value**:
    - Revealed the strategy's susceptibility to losses in trending markets.
 
-   ![maker](maker.png)
+   ![maker](output/maker.png)
 
 
 
