@@ -22,8 +22,13 @@ using namespace std;
 
 GridStrategy::GridStrategy(StrategyID strategyID, const std::string& strategyName, const std::string& groupName) :
     Strategy(strategyID, strategyName, groupName),
-    grid_spacing_(1.0),
+    initial_capital_(100000),
+    grid_size_(0.005),
+    num_grids_(20),
     position_size_(100),
+    cash_(initial_capital_),
+    current_position_(0),
+    transaction_cost_(0.0001),
     debug_(false)
 {
 }
@@ -36,15 +41,21 @@ GridStrategy::~GridStrategy()
 void GridStrategy::OnResetStrategyState()
 {
     active_orders_.clear();
+    cash_ = initial_capital_;
+    current_position_ = 0;
+    portfolio_value_ = initial_capital_;
 }
 
 void GridStrategy::DefineStrategyParams()
 {
-    params().CreateParam(CreateStrategyParamArgs("grid_spacing", STRATEGY_PARAM_TYPE_STARTUP, VALUE_TYPE_DOUBLE, grid_spacing_));
+    // Add configurable parameters
+    params().CreateParam(CreateStrategyParamArgs("initial_capital", STRATEGY_PARAM_TYPE_STARTUP, VALUE_TYPE_DOUBLE, initial_capital_));
+    params().CreateParam(CreateStrategyParamArgs("grid_size", STRATEGY_PARAM_TYPE_STARTUP, VALUE_TYPE_DOUBLE, grid_size_));
+    params().CreateParam(CreateStrategyParamArgs("num_grids", STRATEGY_PARAM_TYPE_STARTUP, VALUE_TYPE_INT, num_grids_));
     params().CreateParam(CreateStrategyParamArgs("position_size", STRATEGY_PARAM_TYPE_RUNTIME, VALUE_TYPE_INT, position_size_));
+    params().CreateParam(CreateStrategyParamArgs("transaction_cost", STRATEGY_PARAM_TYPE_STARTUP, VALUE_TYPE_DOUBLE, transaction_cost_));
     params().CreateParam(CreateStrategyParamArgs("debug", STRATEGY_PARAM_TYPE_RUNTIME, VALUE_TYPE_BOOL, debug_));
 }
-
 
 void GridStrategy::DefineStrategyCommands() {
     // Define any commands your strategy needs. Example:
@@ -54,6 +65,7 @@ void GridStrategy::DefineStrategyCommands() {
 
 void GridStrategy::RegisterForStrategyEvents(StrategyEventRegister* eventRegister, DateType currDate)
 {
+    // Register for bar updates
     for (SymbolSetConstIter it = symbols_begin(); it != symbols_end(); ++it) {
         eventRegister->RegisterForBars(*it, BAR_TYPE_TIME, 1);
     }
@@ -61,59 +73,102 @@ void GridStrategy::RegisterForStrategyEvents(StrategyEventRegister* eventRegiste
 
 void GridStrategy::OnBar(const BarEventMsg& msg)
 {
-    if (debug_) {
-        ostringstream str;
-        str << msg.instrument().symbol() << ": " << msg.bar();
-        logger().LogToClient(LOGLEVEL_DEBUG, str.str().c_str());
+    const Instrument* instrument = &msg.instrument();
+    double current_price = msg.bar().close();
+    
+    // Initialize grid levels if not yet set
+    if (grid_levels_.empty()) {
+        InitializeGridLevels(current_price);
     }
-
-    AdjustGridOrders(&msg.instrument(), msg.bar().close());
-}
-
-void GridStrategy::AdjustGridOrders(const Instrument* instrument, double current_price)
-{
-    double price_above = current_price + grid_spacing_;
-    double price_below = current_price - grid_spacing_;
-
-    // Check and create buy order at the lower grid level
-    if (!HasActiveOrder(instrument, ORDER_SIDE_BUY, price_below)) {
-        SendOrder(instrument, ORDER_SIDE_BUY, position_size_, price_below);
-    }
-
-    // Check and create sell order at the upper grid level
-    if (!HasActiveOrder(instrument, ORDER_SIDE_SELL, price_above)) {
-        SendOrder(instrument, ORDER_SIDE_SELL, position_size_, price_above);
-    }
-}
-
-bool GridStrategy::HasActiveOrder(const Instrument* instrument, OrderSide side, double price)
-{
-    for (const auto& order : active_orders_) {
-        if (order->instrument() == instrument && order->order_side() == side && fabs(order.params().price - price) < 1e-6) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void GridStrategy::SendOrder(const Instrument* instrument, OrderSide side, int size, double price)
-{
-    OrderParams params(*instrument, size, price, MARKET_CENTER_ID_NASDAQ, side, ORDER_TIF_DAY, ORDER_TYPE_LIMIT);
-    trade_actions()->SendNewOrder(params);
-
+    
+    // Update grid orders based on current price
+    UpdateGridOrders(instrument, current_price);
+    
+    // Update portfolio value
+    portfolio_value_ = cash_ + (current_position_ * current_price);
+    
     if (debug_) {
         std::stringstream ss;
-        ss << "Sent new order: "
-           << "Side: " << (side == ORDER_SIDE_BUY ? "Buy" : "Sell")
-           << ", Price: " << price
-           << ", Size: " << size;
+        ss << "Price: " << current_price 
+           << ", Position: " << current_position_
+           << ", Portfolio Value: " << portfolio_value_;
         logger().LogToClient(LOGLEVEL_DEBUG, ss.str());
     }
 }
 
+void GridStrategy::InitializeGridLevels(double mid_price)
+{
+    grid_levels_.clear();
+    for (int i = -num_grids_; i <= num_grids_; ++i) {
+        grid_levels_.push_back(mid_price * (1.0 + i * grid_size_));
+    }
+}
+
+void GridStrategy::UpdateGridOrders(const Instrument* instrument, double current_price)
+{
+    // Cancel all existing orders
+    trade_actions()->SendCancelAll();
+    active_orders_.clear();
+    
+    for (const auto& level : grid_levels_) {
+        if (level > current_price) {
+            // Place sell orders above current price
+            if (!HasActiveOrder(instrument, ORDER_SIDE_SELL, level)) {
+                SendOrder(instrument, ORDER_SIDE_SELL, position_size_, level);
+            }
+        } else if (level < current_price) {
+            // Place buy orders below current price
+            if (!HasActiveOrder(instrument, ORDER_SIDE_BUY, level)) {
+                SendOrder(instrument, ORDER_SIDE_BUY, position_size_, level);
+            }
+        }
+    }
+}
+
+void GridStrategy::UpdateGridOrders(const Instrument* instrument, double current_price)
+{
+    // Cancel all existing orders
+    trade_actions()->SendCancelAll();
+    active_orders_.clear();
+    
+    for (const auto& level : grid_levels_) {
+        if (level > current_price) {
+            // Place sell orders above current price
+            if (!HasActiveOrder(instrument, ORDER_SIDE_SELL, level)) {
+                SendOrder(instrument, ORDER_SIDE_SELL, position_size_, level);
+            }
+        } else if (level < current_price) {
+            // Place buy orders below current price
+            if (!HasActiveOrder(instrument, ORDER_SIDE_BUY, level)) {
+                SendOrder(instrument, ORDER_SIDE_BUY, position_size_, level);
+            }
+        }
+    }
+}
+
+
 void GridStrategy::OnOrderUpdate(const OrderUpdateEventMsg& msg)
 {
-
+    if (msg.status() == ORDER_STATUS_FILLED) {
+        // Update position and cash based on fill
+        if (msg.order_side() == ORDER_SIDE_BUY) {
+            current_position_ += msg.last_fill_size();
+            cash_ -= msg.last_fill_size() * msg.last_fill_price() * (1.0 + transaction_cost_);
+        } else {
+            current_position_ -= msg.last_fill_size();
+            cash_ += msg.last_fill_size() * msg.last_fill_price() * (1.0 - transaction_cost_);
+        }
+        
+        if (debug_) {
+            std::stringstream ss;
+            ss << "Order filled - Side: " << (msg.order_side() == ORDER_SIDE_BUY ? "Buy" : "Sell")
+               << ", Size: " << msg.last_fill_size()
+               << ", Price: " << msg.last_fill_price()
+               << ", New Position: " << current_position_
+               << ", Cash: " << cash_;
+            logger().LogToClient(LOGLEVEL_DEBUG, ss.str());
+        }
+    }
 }
 
 
@@ -150,18 +205,18 @@ void GridStrategy::OnStrategyCommand(const StrategyCommandEventMsg& msg)
 
 void GridStrategy::OnParamChanged(StrategyParam& param)
 {
-    if (param.param_name() == "grid_spacing") {
-        if (!param.Get(&grid_spacing_)) {
-            throw StrategyStudioException("Could not get grid_spacing");
-        }
+    if (param.param_name() == "initial_capital") {
+        param.Get(&initial_capital_);
+    } else if (param.param_name() == "grid_size") {
+        param.Get(&grid_size_);
+    } else if (param.param_name() == "num_grids") {
+        param.Get(&num_grids_);
     } else if (param.param_name() == "position_size") {
-        if (!param.Get(&position_size_)) {
-            throw StrategyStudioException("Could not get position_size");
-        }
+        param.Get(&position_size_);
+    } else if (param.param_name() == "transaction_cost") {
+        param.Get(&transaction_cost_);
     } else if (param.param_name() == "debug") {
-        if (!param.Get(&debug_)) {
-            throw StrategyStudioException("Could not get debug");
-        }
+        param.Get(&debug_);
     }
 }
 
