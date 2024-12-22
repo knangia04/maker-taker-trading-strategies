@@ -105,6 +105,10 @@ The strategy incorporates **momentum** as a key factor in confirming the strengt
   - Tracked daily, accounting for the execution of trades.
 
 ##### **2.3 Results and Insights**
+
+![Project Screenshot](SPY_SMA.png)
+![Project Screenshot](SPY_SMA_portfolio.png)
+
 - **Initial Capital**: $10,000.
 - **Final Portfolio Value**: $14,854.48.
 - **Return**: 48.5% over three years.
