@@ -178,9 +178,7 @@ Future developments will explore ways to enhance the momentum filtering process 
 
 ---
 
-# Grid Trading Strategy
-
-**Final Report: Grid Trading Strategy (Market Maker Strategy)**
+# Grid Trading Strategy (Market Maker Strategy)
 
 ### **Introduction**
 
