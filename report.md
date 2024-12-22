@@ -195,6 +195,9 @@ This report delves into the theoretical underpinnings, practical implementation,
 #### **Grid Levels**
 At the core of the Grid Trading Strategy lies the segmentation of the price range into discrete grid levels. 
 
+
+![Cumulative PnL](output/maker_formula.png)
+
 #### **Trade Execution**
 The strategy revolves around a simple yet effective rule set:
 - **Buy Orders**: Executed when the price crosses downward into a lower grid level.
