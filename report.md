@@ -16,8 +16,11 @@
   - Taker Demo Video
 
 - **[Asuthosh Anandaram ]**:
-  - Market Taker Ideation and Cpp implementation
-  - Github cleanup + ReadMe's
+  -
+  - Implementation and backtesting of Taker Strategy in Python using ipynb
+  - Implementation and backtesting of Taker Strategy in Cpp for Strategy Studio
+  - Final Report
+  - Github ReadMe
   - Documeting taker and maker strategies
 
 - **[Krish Nangia]**:
