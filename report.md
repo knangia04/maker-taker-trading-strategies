@@ -267,11 +267,129 @@ The C++ implementation sought to:
 - **Sharpe Ratio**: \(-0.45\).
 - **Maximum Drawdown**: \(-2.88\%\).
 
+![maker](output/maker.png)
 
 
 
 
-   ![maker](output/maker.png)
+**Final Report: Grid Trading Strategy Implementation in C++**
+
+---
+
+### **Abstract**
+
+This report explores the implementation of the **Grid Trading Strategy** in C++ using **Strategy Studio**, a platform tailored for real-time trading and advanced financial strategy execution. The Grid Trading Strategy is a market-neutral approach designed to capitalize on price fluctuations by systematically placing buy and sell orders at predefined price levels, known as grid levels. The focus of this report is on the architecture, functionality, and real-time execution capabilities of the C++ implementation, as well as its integration into the Strategy Studio framework.
+
+---
+
+### **Introduction**
+
+The Grid Trading Strategy operates by dividing the price range of a trading instrument into multiple grid levels, systematically buying when prices fall to lower levels and selling as they rise to higher levels. This market-making strategy thrives in range-bound market conditions and is designed to profit from price oscillations without taking on directional risk.
+
+The C++ implementation was developed to leverage the real-time processing capabilities of Strategy Studio. This report provides a comprehensive overview of the implementation, highlighting its key features, execution logic, and potential for scalability in live trading environments.
+
+---
+
+### **Implementation Details**
+
+#### **Grid Initialization**
+
+The strategy initializes grid levels dynamically based on the midpoint of the price range and user-configurable parameters. Each grid level is calculated as follows:
+
+\[
+\text{Grid Level}_i = P_{\text{mid}} \times (1 + i \times \text{Grid Size})
+\]
+
+Where:
+- \( P_{\text{mid}} \) is the midpoint price.
+- \( i \) is the grid index, ranging from \(-N\) to \(+N\), with \( N \) being the number of grid levels above and below \( P_{\text{mid}} \).
+- \(\text{Grid Size}\) is the percentage difference between adjacent grid levels.
+
+The **InitializeGridLevels** function dynamically creates these levels based on the first observed price:
+
+```cpp
+void GridStrategy::InitializeGridLevels(double mid_price) {
+    grid_levels_.clear();
+    for (int i = -num_grids_; i <= num_grids_; ++i) {
+        grid_levels_.push_back(mid_price * (1.0 + i * grid_size_));
+    }
+}
+```
+
+---
+
+#### **Order Management**
+
+The strategy dynamically manages buy and sell orders at grid levels. Key components include:
+
+1. **Placing Orders**:
+   - Buy orders are placed below the current price, and sell orders are placed above.
+   - The **UpdateGridOrders** function ensures orders are always aligned with the current market conditions:
+   
+     void GridStrategy::UpdateGridOrders(const Instrument* instrument, double current_price) {
+         for (const auto& level : grid_levels_) {
+             if (level > current_price) {
+                 if (!HasActiveOrder(instrument, ORDER_SIDE_SELL, level)) {
+                     SendOrder(instrument, ORDER_SIDE_SELL, position_size_, level);
+                 }
+             } else if (level < current_price) {
+                 if (!HasActiveOrder(instrument, ORDER_SIDE_BUY, level)) {
+                     SendOrder(instrument, ORDER_SIDE_BUY, position_size_, level);
+                 }
+             }
+         }
+     }
+     ```
+
+2. **Order Execution**:
+   - On execution, positions and cash balances are updated:
+
+     if (msg.order_side() == ORDER_SIDE_BUY) {
+         current_position_ += msg.last_fill_size();
+         cash_ -= msg.last_fill_size() * msg.last_fill_price() * (1.0 + transaction_cost_);
+     } else {
+         current_position_ -= msg.last_fill_size();
+         cash_ += msg.last_fill_size() * msg.last_fill_price() * (1.0 - transaction_cost_);
+     }
+     
+
+3. **Order Cancellation**:
+   - Existing orders are canceled and replaced as the price moves through the grid levels. This ensures alignment with the current market price and prevents stale orders.
+
+---
+
+#### **Portfolio Management**
+
+The portfolio value is continuously updated based on the current cash balance and the market value of the open positions. This real-time update enables the strategy to monitor performance and adjust dynamically.
+
+---
+
+#### **Debugging and Logging**
+
+Debugging is facilitated through detailed logging of market events, order updates, and portfolio changes. The logging system provides real-time insights into strategy behavior.
+
+---
+
+### **Integration with Strategy Studio**
+
+The implementation leverages Strategy Studio’s capabilities for real-time market data processing and order management. Key integrations include:
+
+1. **Market Event Handling**:
+   - The **OnBar** function processes bar updates to adjust grid orders dynamically based on the latest price.
+
+2. **Command and Parameterization**:
+   - Strategy parameters, such as grid size and transaction costs, are configurable through the Strategy Studio interface. This flexibility allows for real-time adjustments to the strategy.
+
+3. **Execution Efficiency**:
+   - Using Strategy Studio’s APIs, the strategy ensures high-speed order placement, cancellation, and execution.
+
+
+
+
+
+
+
+
 
 
 
