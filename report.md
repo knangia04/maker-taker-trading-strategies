@@ -77,24 +77,77 @@ The strategy incorporates **momentum** as a key factor in confirming the strengt
 
 ## Current Implementation
 
-### Basic Strategy
-The initial implementation of the SMA-based Reactive Taker Strategy involves buying SPY when a buy signal is triggered. This is a simplified version of the strategy where the entire available capital is allocated to buying SPY upon a buy signal. The strategy, as it stands, does not include any risk management techniques or position sizing strategies.
-
-The current goal is to test the fundamental concept of the strategy—whether the interaction of price with the 100-day SMA provides meaningful buy and sell signals. A larger portion of the development work will focus on refining the strategy to include position sizing and risk management.
-
-### Preliminary Analysis
-Testing was carried out using historical SPY data within a Jupyter Notebook. The results have provided valuable insights into how the strategy performs under different market conditions. Early tests suggest that the SMA-based strategy captures medium-term trends quite effectively but requires optimization in terms of capital allocation, risk management, and backtesting.
-
-
-
-## Conclusion
-The **SMA-based Reactive Taker Strategy** offers a promising approach to algorithmic trading by leveraging the **100-day Simple Moving Average (SMA)** as a dynamic support and resistance level. The strategy identifies buy and sell signals based on price interactions with the SMA and incorporates momentum to reduce noise from short-term price fluctuations.
-
-Although the strategy demonstrates potential, further work is needed to incorporate risk management techniques, such as position sizing and the **Kelly Criterion**, to improve its effectiveness. Additionally, comprehensive backtesting and performance evaluation will be essential to refine the strategy and ensure its robustness in a variety of market conditions.
-
-Ultimately, the **SMA-based Reactive Taker Strategy** offers a systematic approach to trading SPY, but further development and testing are necessary to optimize risk management and maximize profitability.
+#### **1. Introduction**
+- The **SMA-Based Reactive Taker Strategy** is a trading algorithm designed to capitalize on price interactions with the Simple Moving Average (SMA) as a dynamic support and resistance indicator.
+- Development progressed in two stages:
+  1. **Prototype Implementation in Python**: For proof of concept using historical SPY data.
+  2. **Advanced Implementation in C++**: For integration with **Strategy Studio**, enabling real-time market data analysis and live trading.
+- The goal is to refine and deploy a systematic trading approach that is both profitable and resilient to market volatility.
 
 ---
+
+#### **2. Initial Python Implementation**
+##### **2.1 Methodology**
+- **Data Source**:
+  - Historical SPY data (January 1, 2020 – December 31, 2023) fetched using the `yfinance` library.
+- **Indicators**:
+  - **100-Day SMA**: Used as a benchmark for buy and sell signals.
+  - **Momentum**: Incorporated to confirm the trend and filter out noise.
+- **Signal Generation**:
+  - **Buy Signal**: When the current price > previous price > SMA.
+  - **Sell Signal**: When the current price < previous price < SMA.
+
+##### **2.2 Backtesting Framework**
+- **Capital Allocation**:
+  - Entire portfolio invested when a buy signal was triggered.
+  - Full liquidation when a sell signal occurred.
+- **Portfolio Value Calculation**:
+  - Tracked daily, accounting for the execution of trades.
+
+##### **2.3 Results and Insights**
+- **Initial Capital**: $10,000.
+- **Final Portfolio Value**: $14,854.48.
+- **Return**: 48.5% over three years.
+- **Observations**:
+  - Profitable during the testing period, effectively capturing medium-term trends.
+  - Lacked diversification and advanced risk management mechanisms, leading to potential overexposure in volatile markets.
+
+---
+
+#### **3. Advanced Implementation in C++ with Strategy Studio**
+##### **3.1 Objectives**
+- Transition the Python implementation into **C++** to leverage **Strategy Studio**’s capabilities:
+  - Real-time integration with market data (IEX).
+  - Advanced execution logic and risk management.
+  - Scalability for live deployment.
+
+##### **3.2 Key Features**
+1. **Momentum Indicators**:
+   - Utilized rolling windows for:
+     - **Short SMA (9-day)**: Capturing short-term trends.
+     - **Long SMA (30-day)**: Capturing medium-term trends.
+2. **Signal Logic**:
+   - Similar to the Python version but with additional validation for momentum.
+3. **Dynamic Position Sizing**:
+   - Introduced the `position_size` parameter to adjust trade sizes dynamically based on market conditions.
+4. **Risk Management**:
+   - Implemented order repricing to minimize slippage and improve execution efficiency.
+5. **Execution Logic**:
+   - Orders placed at optimal bid/ask prices with continuous monitoring for market changes.
+
+##### **3.3 Backtesting Results**
+- Conducted in **Strategy Studio** using historical data from IEX.
+- Results showed consistent profitability under varying market conditions.
+- **Improvements Over Python Version**:
+  - Enhanced position sizing reduced exposure during high volatility.
+  - Optimized order placement minimized execution delays and slippage.
+
+#### **4. Conclusion**
+- The **SMA-Based Reactive Taker Strategy** has demonstrated significant potential:
+  - **Python Prototype**: Validated the concept with a profitable backtest.
+  - **C++ Implementation**: Enhanced scalability, execution, and risk management for real-world deployment.
+- Future work will focus on optimizing performance metrics, refining risk management, and adapting the strategy to a broader range of market conditions.
+- With ongoing refinements, the strategy is positioned for successful deployment in both simulated and live trading environments.
 
 **Appendix**: 
 Future developments will explore ways to enhance the momentum filtering process and consider integrating additional technical indicators to further validate the trade signals. Moreover, the potential for using machine learning techniques to predict market trends will be investigated to improve the strategy's predictive accuracy.
