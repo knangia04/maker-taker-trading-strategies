@@ -236,11 +236,9 @@ The strategy inherently avoids directional market bias by balancing positions at
 
 #### **C++ Implementation with Strategy Studio**
 
-### **Key Features**
-
-#### **Dynamic Grid Levels**
 - **Initialization**:
   - At the start of trading, the grid levels are established based on the initial price observed for the instrument. These levels form the foundation for trade placement.
+
 - **Grid Level Behavior**:
   - Grid levels are spaced based on a percentage (`grid size`) above and below the initial price, creating multiple buy and sell thresholds.
   - Levels dynamically adjust during live trading as market prices shift, ensuring the strategy remains relevant to current conditions.
@@ -270,7 +268,6 @@ The strategy inherently avoids directional market bias by balancing positions at
 ---
 
 ### **Integration with Strategy Studio**
-
 
 1. **Market Event Handling**:
    - The strategy listens for bar updates, order executions, and other market events to adjust its grid and manage trades dynamically.
