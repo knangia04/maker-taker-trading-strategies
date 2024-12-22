@@ -106,8 +106,8 @@ The strategy incorporates **momentum** as a key factor in confirming the strengt
 
 ##### **2.3 Results and Insights**
 
-![Project Screenshot](SPY_SMA.png)
-![Project Screenshot](SPY_SMA_portfolio.png)
+![Cumulative PnL](output/SPY_SMA.png)
+![Instruments Traded](output/SPY_SMA_portfolio.png)
 
 - **Initial Capital**: $10,000.
 - **Final Portfolio Value**: $14,854.48.
@@ -139,12 +139,29 @@ The strategy incorporates **momentum** as a key factor in confirming the strengt
 5. **Execution Logic**:
    - Orders placed at optimal bid/ask prices with continuous monitoring for market changes.
 
-##### **3.3 Backtesting Results**
-- Conducted in **Strategy Studio** using historical data from IEX.
-- Results showed consistent profitability under varying market conditions.
-- **Improvements Over Python Version**:
-  - Enhanced position sizing reduced exposure during high volatility.
-  - Optimized order placement minimized execution delays and slippage.
+#### **2.3 Backtesting Results**
+
+##### **Backtest Result Visualization**
+
+The following visualizations summarize the backtesting results from the **Strategy Studio** implementation:
+
+1. **Cumulative PnL Over Time**:
+   - Demonstrates the overall profitability and growth of the strategy during the testing period.
+   - Visualized as a line plot with markers for clarity.
+
+   ![Cumulative PnL Over Time](output/cumulative_pnl.png)
+
+2. **Types of Instruments Traded**:
+   - A bar chart depicting the distribution of different instruments (symbols) traded.
+   - Helps assess diversification and trading focus.
+
+   ![Instruments Traded](output/instruments_traded.png)
+
+3. **Order State Distribution**:
+   - A bar chart showing the frequency of different order states (e.g., filled, canceled).
+   - Provides insights into execution efficiency and strategy behavior.
+
+   ![Order State Distribution](output/order_state_distribution.png)
 
 #### **4. Conclusion**
 - The **SMA-Based Reactive Taker Strategy** has demonstrated significant potential:
