@@ -230,20 +230,6 @@ The strategy inherently avoids directional market bias by balancing positions at
    - **Sharpe Ratio**: Risk-adjusted return.
    - **Maximum Drawdown**: Largest peak-to-trough decline in portfolio value.
 
-##### **Backtesting Results**
-- **Initial Capital**: $100,000.
-- **Final Portfolio Value**: $97,170.
-- **Total Return**: \(-2.83\%\).
-- **Sharpe Ratio**: \(-0.45\).
-- **Maximum Drawdown**: \(-2.88\%\).
-
-##### **Visualization**
-1. **Closing Prices with Grid Levels**:
-   - Visualized SPY's closing prices overlaid with the dynamic grid levels to demonstrate entry and exit points.
-2. **Positions Over Time**:
-   - Highlighted fluctuations in portfolio positions corresponding to price movements.
-3. **Portfolio Value**:
-   - Tracked cumulative portfolio performance throughout the backtesting period.
 
 #### **C++ Implementation with Strategy Studio**
 
@@ -268,13 +254,29 @@ The C++ implementation sought to:
 
 ### **Backtesting Results**
 
-#### **Python Implementation**
 1. **Closing Prices with Grid Levels**:
    - Demonstrated the alignment between price movements and triggered trades.
 2. **Positions Over Time**:
    - Showed how positions dynamically adjusted to market fluctuations.
 3. **Portfolio Value**:
    - Revealed the strategy's susceptibility to losses in trending markets.
+
+- **Initial Capital**: $100,000.
+- **Final Portfolio Value**: $97,170.
+- **Total Return**: \(-2.83\%\).
+- **Sharpe Ratio**: \(-0.45\).
+- **Maximum Drawdown**: \(-2.88\%\).
+
+##### **Visualization**
+1. **Closing Prices with Grid Levels**:
+   - Visualized SPY's closing prices overlaid with the dynamic grid levels to demonstrate entry and exit points.
+2. **Positions Over Time**:
+   - Highlighted fluctuations in portfolio positions corresponding to price movements.
+3. **Portfolio Value**:
+   - Tracked cumulative portfolio performance throughout the backtesting period.
+
+
+
 
    ![maker](output/maker.png)
 
