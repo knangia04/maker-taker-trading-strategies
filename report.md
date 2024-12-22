@@ -15,7 +15,7 @@
   - Github ReadMe's
   - Taker Demo Video
 
-- **[Asuthosh Anandaram ]**:
+- **[Asuthosh Anandaram]**:
   -
   - Implementation and backtesting of Taker Strategy in Python using ipynb
   - Implementation and backtesting of Taker Strategy in Cpp for Strategy Studio
