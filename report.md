@@ -178,59 +178,114 @@ Future developments will explore ways to enhance the momentum filtering process 
 
 ---
 
-# Final Project Report: Grid Trading Strategy
+# Grid Trading Strategy
 
-## 1. Introduction
+**Final Report: Grid Trading Strategy (Market Maker Strategy)**
 
-In the world of automated trading, one of the most popular and robust strategies is **grid trading**. Grid trading involves placing buy and sell orders at predefined intervals above and below the current market price, creating a "grid" of orders that capitalize on market fluctuations. This strategy is particularly useful in markets characterized by high volatility, where prices oscillate within a range rather than trend in one direction.
+### **Introduction**
 
-The grid trading strategy doesn't require advanced market predictions. Instead, it assumes that price will fluctuate in a relatively stable range over time. By placing both buy and sell orders, the strategy aims to profit from these oscillations as the market moves up and down, filling orders at regular intervals.
+The **Grid Trading Strategy**, often termed the Market Maker Strategy, is a quantitative algorithmic trading method designed to capitalize on price oscillations within predefined intervals, referred to as "grid levels." By systematically placing buy and sell orders across these levels, the strategy aims to profit from market volatility while maintaining a neutral portfolio over time. Unlike directional strategies, grid trading thrives in range-bound markets, making it particularly effective during periods of low overall trend strength.
 
-## 2. Objective
+This report delves into the theoretical underpinnings, practical implementation, and backtesting results of the Grid Trading Strategy. It covers the initial prototype development in Python and its subsequent implementation in C++ using Strategy Studio for scalability and real-time trading.
 
-The objective of this project is to implement and backtest a **grid trading strategy** on SPY (S&P 500 ETF) using historical data. This strategy places buy and sell orders at set intervals, creating a grid that captures market oscillations and profits from price fluctuations within a given range. The backtesting process will simulate real-market trading, providing insights into the performance and robustness of the strategy.
+---
 
-## 3. Strategy Overview
+### **Conceptual Framework**
 
-The **Grid Trading Strategy** operates by defining a grid of buy and sell orders around the current market price. The key components of this strategy include:
+#### **Grid Levels**
+At the core of the Grid Trading Strategy lies the segmentation of the price range into discrete grid levels. These levels are determined as follows:
+\[ \text{Grid Level}_i = P_{\text{mid}} \times (1 + i \times \text{Grid Size}) \]
+Where:
+- \( P_{\text{mid}} \): Initial midpoint price.
+- \( i \): Index of the grid, ranging from \(-N\) to \(+N\).
+- **Grid Size**: Percentage difference between adjacent levels.
+- **Number of Grids (N)**: Total grid levels above and below the midpoint.
 
-- **Grid Size**: The distance between buy and sell orders. This distance is measured in points or percentage terms and determines the width of the grid.
-- **Number of Orders**: The total number of buy and sell orders placed in the grid.
-- **Order Size**: The amount of SPY purchased or sold per order. This can be constant or dynamically adjusted based on account balance or risk parameters.
+#### **Trade Execution**
+The strategy revolves around a simple yet effective rule set:
+- **Buy Orders**: Executed when the price crosses downward into a lower grid level.
+- **Sell Orders**: Executed when the price crosses upward into a higher grid level.
 
-### Key Assumptions
+This mechanism ensures that the portfolio continuously rebalances to exploit price oscillations. For instance:
+- If SPY's price drops from $102 to $100, the strategy buys at $101.
+- Conversely, if SPY's price rises from $99 to $101, the strategy sells at $100.
 
-- **Market Oscillation**: The strategy assumes that the market price will oscillate within a range over time, making it suitable for sideways or range-bound markets.
-- **Profit from Reversals**: The goal is to profit from price reversals by capturing small price movements up and down within the grid.
+#### **Neutral Portfolio Philosophy**
+The strategy inherently avoids directional market bias by balancing positions at different price levels. As prices oscillate, the portfolio alternates between long and short positions, stabilizing overall exposure.
 
-### Trade Execution
-1. **Buy Orders**: Buy orders are placed at intervals below the current market price.
-2. **Sell Orders**: Sell orders are placed at intervals above the current market price.
-3. **Order Refill**: Once an order is filled, it is immediately replaced with a new order at the next interval, keeping the grid intact.
+---
 
-## 4. Backtesting Process
+### **Implementation Details**
 
-The backtesting process involves testing the grid trading strategy against historical SPY data to evaluate its effectiveness. The following steps were taken to implement the backtest:
+#### **Python Prototype**
 
-1. **Data Collection**: Historical SPY data (price and volume) for a specific period was collected.
-2. **Grid Setup**: The grid size and number of orders were defined.
-3. **Order Execution**: Simulated orders were placed at predefined intervals based on market movements.
-4. **Performance Evaluation**: Key metrics such as total return, maximum drawdown, and win rate were calculated.
+##### **Methodology**
+1. **Data Source**:
+   Historical SPY data (2020-2023) was sourced using the `yfinance` library, offering comprehensive coverage for backtesting.
 
-## 5. Performance Metrics
+2. **Grid Initialization**:
+   Grid levels were dynamically calculated based on the midpoint of the initial price and specified parameters:
+   - **Initial Capital**: $100,000.
+   - **Grid Size**: 0.5%.
+   - **Number of Grids**: 20 levels above and below the midpoint.
 
-The performance of the grid trading strategy was evaluated using the following metrics:
+3. **Execution Logic**:
+   - At each grid level, the strategy either buys (on downward price movement) or sells (on upward price movement).
+   - Transaction costs of 0.01% per trade were included to simulate real-world conditions.
 
-- **Total Return**: The overall return generated by the strategy over the test period.
-- **Maximum Drawdown**: The largest peak-to-trough loss during the testing period.
-- **Win Rate**: The percentage of trades that resulted in a profit.
+4. **Performance Metrics**:
+   - **Total Return**: Net gain or loss over the backtesting period.
+   - **Sharpe Ratio**: Risk-adjusted return.
+   - **Maximum Drawdown**: Largest peak-to-trough decline in portfolio value.
 
-## 6. Results and Discussion
+##### **Backtesting Results**
+- **Initial Capital**: $100,000.
+- **Final Portfolio Value**: $97,170.
+- **Total Return**: \(-2.83\%\).
+- **Sharpe Ratio**: \(-0.45\).
+- **Maximum Drawdown**: \(-2.88\%\).
 
-The results of the backtest indicate that the grid trading strategy performs well in a range-bound market with consistent oscillations. However, the strategy's performance is sensitive to the choice of grid size and the volatility of the market during the testing period. Larger grid sizes tend to perform better during high-volatility periods, while smaller grid sizes are more suited for low-volatility, range-bound markets.
+##### **Visualization**
+1. **Closing Prices with Grid Levels**:
+   - Visualized SPY's closing prices overlaid with the dynamic grid levels to demonstrate entry and exit points.
+2. **Positions Over Time**:
+   - Highlighted fluctuations in portfolio positions corresponding to price movements.
+3. **Portfolio Value**:
+   - Tracked cumulative portfolio performance throughout the backtesting period.
 
-## 7. Conclusion
+#### **C++ Implementation with Strategy Studio**
 
-The **Grid Trading Strategy** offers a straightforward approach to capitalizing on market oscillations. It works best in range-bound markets where prices are expected to fluctuate within a defined range. However, its performance can be highly sensitive to market volatility, and proper grid size selection is crucial to its success.
+##### **Objectives**
+The C++ implementation sought to:
+- Scale the strategy for real-time trading.
+- Automate execution using Strategy Studio's advanced features.
+- Integrate live market data to dynamically adjust grid levels.
 
-Future work will focus on optimizing the grid size, improving risk management techniques, and integrating advanced technical indicators to refine the grid trading strategy. Further backtesting across various market conditions will also be necessary to assess the robustness and adaptability of the strategy.
+##### **Key Features**
+1. **Dynamic Grid Levels**:
+   - Grid levels recalculated at runtime to adapt to price changes.
+
+2. **Order Management**:
+   - Implemented robust logic for placing and managing buy/sell orders through Strategy Studio's APIs.
+
+3. **Real-Time Position Tracking**:
+   - Monitored cash reserves, open positions, and portfolio value in real time.
+
+4. **Risk Mitigation**:
+   - Incorporated order cancellation and repricing mechanisms to minimize slippage.
+
+### **Backtesting Results**
+
+#### **Python Implementation**
+1. **Closing Prices with Grid Levels**:
+   - Demonstrated the alignment between price movements and triggered trades.
+2. **Positions Over Time**:
+   - Showed how positions dynamically adjusted to market fluctuations.
+3. **Portfolio Value**:
+   - Revealed the strategy's susceptibility to losses in trending markets.
+
+   ![maker](maker.png)
+
+
+
+
