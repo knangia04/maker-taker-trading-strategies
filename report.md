@@ -2,13 +2,15 @@
 ### Team Members and Their Contributions
 
 - **[Khushi Kalra]**:
+  - Maker Strategy Ideation
   - Implementation of Maker Strategy in Python using ipynb
   - Implementation of Maker Strategy in Cpp 
+  - Toy Strategy for Maker
   - Final Project Report
 
 - **[Siddarth Ananath]**:
   - Initial Setup
-  - Toy Strategy
+  - Toy Strategy for Taker
   - Developed scripts for: result_visualization (SS output), bash scripts for automating backtests (run_strategy.sh) to simplify tasks across repo
   - Implementation and backtesting of Taker Strategy in Python using ipynb
   - Implementation and backtesting of Taker Strategy in Cpp using Strategy Studio
