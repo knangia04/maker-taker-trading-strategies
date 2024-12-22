@@ -26,7 +26,7 @@
 
 - **[Krish Nangia]**:
   - Maker Strategy Ideation
-  - Implementation, simplification, and succesful backtesting of Maker Strategy in Python using ipynb
+  - Implementation, simplification, and successful backtesting of Maker Strategy in Python using ipynb
   - Implementation, debugging, and (attempted) backtesting of Maker Strategy in Cpp using Strategy Studio
   - Maker Demo Video with code explanation
   - Github ReadMe
