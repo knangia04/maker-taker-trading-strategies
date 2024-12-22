@@ -236,24 +236,52 @@ The strategy inherently avoids directional market bias by balancing positions at
 
 #### **C++ Implementation with Strategy Studio**
 
-##### **Objectives**
-The C++ implementation sought to:
-- Scale the strategy for real-time trading.
-- Automate execution using Strategy Studio's advanced features.
-- Integrate live market data to dynamically adjust grid levels.
+### **Key Features**
 
-##### **Key Features**
-1. **Dynamic Grid Levels**:
-   - Grid levels recalculated at runtime to adapt to price changes.
+#### **Dynamic Grid Levels**
+- **Initialization**:
+  - At the start of trading, the grid levels are established based on the initial price observed for the instrument. These levels form the foundation for trade placement.
+- **Grid Level Behavior**:
+  - Grid levels are spaced based on a percentage (`grid size`) above and below the initial price, creating multiple buy and sell thresholds.
+  - Levels dynamically adjust during live trading as market prices shift, ensuring the strategy remains relevant to current conditions.
 
-2. **Order Management**:
-   - Implemented robust logic for placing and managing buy/sell orders through Strategy Studio's APIs.
+#### **Order Management**
+- **Placement**:
+  - The strategy places buy orders below the current market price and sell orders above it. This ensures the strategy capitalizes on price movements within the grid.
+- **Execution**:
+  - When the price crosses a grid level, the corresponding order is filled, triggering a position update. For example:
+    - A downward price movement fills a buy order, increasing the position.
+    - An upward price movement fills a sell order, reducing the position.
+- **Cancellation**:
+  - Stale orders (those no longer aligned with the updated grid levels) are systematically canceled to avoid unintended execution.
 
-3. **Real-Time Position Tracking**:
-   - Monitored cash reserves, open positions, and portfolio value in real time.
+#### **Real-Time Position Tracking**
+- **Portfolio Updates**:
+  - The portfolio value is recalculated after every price update, considering both the cash balance and the market value of open positions.
+- **Monitoring**:
+  - Real-time tracking of cash reserves, current position sizes, and portfolio value ensures the strategy remains informed of its financial state.
 
-4. **Risk Mitigation**:
-   - Incorporated order cancellation and repricing mechanisms to minimize slippage.
+#### **Risk Mitigation**
+- **Transaction Costs**:
+  - Transaction costs are incorporated into all calculations to provide a realistic view of profitability and ensure execution accuracy.
+- **Order Repricing**:
+  - If market conditions shift significantly, orders are repriced to maintain alignment with current grid levels, minimizing slippage and improving execution efficiency.
+
+---
+
+### **Integration with Strategy Studio**
+
+
+1. **Market Event Handling**:
+   - The strategy listens for bar updates, order executions, and other market events to adjust its grid and manage trades dynamically.
+   - For each price update, the strategy recalculates grid levels and reevaluates active orders.
+
+2. **Customizable Parameters**:
+   - Strategy Studio provides a flexible interface for configuring parameters such as initial capital, grid size, transaction costs, and debug modes. These can be adjusted dynamically during trading.
+
+3. **Command Management**:
+   - The implementation includes custom commands for actions like canceling all orders or repricing active orders. This enhances user control over strategy behavior.
+
 
 ### **Backtesting Results**
 
