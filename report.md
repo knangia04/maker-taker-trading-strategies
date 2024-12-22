@@ -168,7 +168,7 @@ The following visualizations summarize the backtesting results from the **Strate
   - **Python Prototype**: Validated the concept with a profitable backtest.
   - **C++ Implementation**: Enhanced scalability, execution, and risk management for real-world deployment.
 - Future work will focus on optimizing performance metrics, refining risk management, and adapting the strategy to a broader range of market conditions.
-- With ongoing refinements, the strategy is positioned for successful deployment in both simulated and live trading environments.
+
 
 **Appendix**: 
 Future developments will explore ways to enhance the momentum filtering process and consider integrating additional technical indicators to further validate the trade signals. Moreover, the potential for using machine learning techniques to predict market trends will be investigated to improve the strategy's predictive accuracy.
