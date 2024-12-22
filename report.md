@@ -193,13 +193,7 @@ This report delves into the theoretical underpinnings, practical implementation,
 ### **Conceptual Framework**
 
 #### **Grid Levels**
-At the core of the Grid Trading Strategy lies the segmentation of the price range into discrete grid levels. These levels are determined as follows:
-\[ \text{Grid Level}_i = P_{\text{mid}} \times (1 + i \times \text{Grid Size}) \]
-Where:
-- \( P_{\text{mid}} \): Initial midpoint price.
-- \( i \): Index of the grid, ranging from \(-N\) to \(+N\).
-- **Grid Size**: Percentage difference between adjacent levels.
-- **Number of Grids (N)**: Total grid levels above and below the midpoint.
+At the core of the Grid Trading Strategy lies the segmentation of the price range into discrete grid levels. 
 
 #### **Trade Execution**
 The strategy revolves around a simple yet effective rule set:
@@ -212,8 +206,6 @@ This mechanism ensures that the portfolio continuously rebalances to exploit pri
 
 #### **Neutral Portfolio Philosophy**
 The strategy inherently avoids directional market bias by balancing positions at different price levels. As prices oscillate, the portfolio alternates between long and short positions, stabilizing overall exposure.
-
----
 
 ### **Implementation Details**
 
@@ -291,149 +283,4 @@ The C++ implementation sought to:
 
 
 
-
-**Final Report: Grid Trading Strategy (Market Maker Strategy)**
-
-### **Introduction**
-
-The **Grid Trading Strategy**, often termed the Market Maker Strategy, is a quantitative algorithmic trading method designed to capitalize on price oscillations within predefined intervals, referred to as "grid levels." By systematically placing buy and sell orders across these levels, the strategy aims to profit from market volatility while maintaining a neutral portfolio over time. Unlike directional strategies, grid trading thrives in range-bound markets, making it particularly effective during periods of low overall trend strength.
-
-This report delves into the theoretical underpinnings, practical implementation, and backtesting results of the Grid Trading Strategy. It covers the initial prototype development in Python and its subsequent implementation in C++ using Strategy Studio for scalability and real-time trading.
-
----
-
-### **Conceptual Framework**
-
-#### **Grid Levels**
-
-At the core of the Grid Trading Strategy lies the segmentation of the price range into discrete grid levels.
-
-#### **Trade Execution**
-The strategy revolves around a simple yet effective rule set:
-- **Buy Orders**: Executed when the price crosses downward into a lower grid level.
-- **Sell Orders**: Executed when the price crosses upward into a higher grid level.
-
-This mechanism ensures that the portfolio continuously rebalances to exploit price oscillations. For instance:
-- If SPY's price drops from $102 to $100, the strategy buys at $101.
-- Conversely, if SPY's price rises from $99 to $101, the strategy sells at $100.
-
-#### **Neutral Portfolio Philosophy**
-The strategy inherently avoids directional market bias by balancing positions at different price levels. As prices oscillate, the portfolio alternates between long and short positions, stabilizing overall exposure.
-
----
-
-### **Implementation Details**
-
-#### **Python Prototype**
-
-##### **Methodology**
-1. **Data Source**:
-   Historical SPY data (2020-2023) was sourced using the `yfinance` library, offering comprehensive coverage for backtesting.
-
-2. **Grid Initialization**:
-   Grid levels were dynamically calculated based on the midpoint of the initial price and specified parameters:
-   - **Initial Capital**: $100,000.
-   - **Grid Size**: 0.5%.
-   - **Number of Grids**: 20 levels above and below the midpoint.
-
-3. **Execution Logic**:
-   - At each grid level, the strategy either buys (on downward price movement) or sells (on upward price movement).
-   - Transaction costs of 0.01% per trade were included to simulate real-world conditions.
-
-4. **Performance Metrics**:
-   - **Total Return**: Net gain or loss over the backtesting period.
-   - **Sharpe Ratio**: Risk-adjusted return.
-   - **Maximum Drawdown**: Largest peak-to-trough decline in portfolio value.
-
-##### **Backtesting Results**
-- **Initial Capital**: $100,000.
-- **Final Portfolio Value**: $97,170.
-- **Total Return**: \(-2.83\%\).
-- **Sharpe Ratio**: \(-0.45\).
-- **Maximum Drawdown**: \(-2.88\%\).
-
-##### **Visualization**
-1. **Closing Prices with Grid Levels**:
-   - Visualized SPY's closing prices overlaid with the dynamic grid levels to demonstrate entry and exit points.
-2. **Positions Over Time**:
-   - Highlighted fluctuations in portfolio positions corresponding to price movements.
-3. **Portfolio Value**:
-   - Tracked cumulative portfolio performance throughout the backtesting period.
-
-#### **C++ Implementation with Strategy Studio**
-
-##### **Objectives**
-The C++ implementation sought to:
-- Scale the strategy for real-time trading.
-- Automate execution using Strategy Studio's advanced features.
-- Integrate live market data to dynamically adjust grid levels.
-
-##### **Key Features**
-1. **Dynamic Grid Levels**:
-   - Grid levels recalculated at runtime to adapt to price changes.
-
-2. **Order Management**:
-   - Implemented robust logic for placing and managing buy/sell orders through Strategy Studio's APIs.
-
-3. **Real-Time Position Tracking**:
-   - Monitored cash reserves, open positions, and portfolio value in real time.
-
-4. **Risk Mitigation**:
-   - Incorporated order cancellation and repricing mechanisms to minimize slippage.
-
-##### **Backtesting and Integration**
-1. **Result Validation**:
-   - Compared outputs from the C++ implementation with the Python prototype for consistency.
-2. **Visualization Integration**:
-   - Exported C++ backtesting data was visualized using Python tools, ensuring seamless interpretation of results.
-3. **Observations**:
-   - The C++ implementation matched Python's performance but highlighted the need for optimized grid sizes and risk controls.
-
----
-
-### **Backtesting Results**
-
-#### **Python Implementation**
-1. **Closing Prices with Grid Levels**:
-   - Demonstrated the alignment between price movements and triggered trades.
-2. **Positions Over Time**:
-   - Showed how positions dynamically adjusted to market fluctuations.
-3. **Portfolio Value**:
-   - Revealed the strategy's susceptibility to losses in trending markets.
-
-#### **C++ Integration**
-- Unified visualization of Python and C++ results enabled:
-  - **Cumulative Portfolio Value**: Comparative analysis of performance across implementations.
-  - **Order Activity**: Detailed trade execution insights.
-
----
-
-### **Conclusion and Future Work**
-
-#### **Key Takeaways**
-- **Strengths**:
-  - Effective in range-bound markets with frequent price oscillations.
-  - Straightforward and systematic approach.
-- **Weaknesses**:
-  - Underperforms in trending markets where prices move directionally.
-  - High exposure to extreme positions at grid boundaries.
-
-#### **Future Enhancements**
-1. **Risk Management**:
-   - Introduce stop-loss and take-profit mechanisms.
-   - Limit maximum exposure at any grid level.
-2. **Parameter Optimization**:
-   - Adjust grid sizes dynamically based on market volatility.
-3. **Hybrid Strategies**:
-   - Combine grid trading with momentum-based techniques to adapt to various market conditions.
-4. **Machine Learning Integration**:
-   - Employ predictive algorithms to adjust grid parameters in real time.
-
----
-
-### **Appendix**
-1. **Python Code**: Includes implementation and visualization scripts.
-2. **C++ Code**: Details of Strategy Studio integration and logic.
-3. **Visualization Workflow**: Unified results from Python and C++ implementations.
-4. **Potential Research Directions**: Exploring machine learning and hybrid strategies for grid trading.
 
