@@ -233,8 +233,10 @@ The strategy inherently avoids directional market bias by balancing positions at
    - **Sharpe Ratio**: Risk-adjusted return.
    - **Maximum Drawdown**: Largest peak-to-trough decline in portfolio value.
 
+   -------------------------------------------------------------------------
 
-#### ***C++ Implementation with Strategy Studio***
+
+#### **C++ Implementation with Strategy Studio**
 
 - **Initialization**:
   - At the start of trading, the grid levels are established based on the initial price observed for the instrument. These levels form the foundation for trade placement.
