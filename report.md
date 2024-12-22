@@ -18,12 +18,11 @@
   - Taker Demo Video
 
 - **[Asuthosh Anandaram]**:
-  -
   - Implementation and backtesting of Taker Strategy in Python using ipynb
   - Implementation and backtesting of Taker Strategy in Cpp for Strategy Studio
   - Final Report
   - Github ReadMe
-  - Documeting taker and maker strategies
+  - Documenting taker and maker strategies
 
 - **[Krish Nangia]**:
   - Maker Strategy Ideation
@@ -31,7 +30,7 @@
   - Implementation, debugging, and (attempted) backtesting of Maker Strategy in Cpp using Strategy Studio
   - Maker Demo Video with code explanation
   - Github ReadMe
-  - Backtesting Analysis on Final Project Report
+  - Maker backtesting analysis on Final Project Report
 
 
 # SMA (Simple Moving Averages) Based Reactive Taker Strategy
