@@ -207,9 +207,6 @@ This mechanism ensures that the portfolio continuously rebalances to exploit pri
 - If SPY's price drops from $102 to $100, the strategy buys at $101.
 - Conversely, if SPY's price rises from $99 to $101, the strategy sells at $100.
 
-#### **Neutral Portfolio Philosophy**
-The strategy inherently avoids directional market bias by balancing positions at different price levels. As prices oscillate, the portfolio alternates between long and short positions, stabilizing overall exposure.
-
 ### **Implementation Details**
 
 #### **Python Prototype**
