@@ -66,6 +66,16 @@ Balancing my academic research with practical experience, I've also worked as a 
 
 **Other:** https://scholar.google.com/citations?user=R8vrP5gAAAAJ&hl=en
 
+### Krish Nangia
+
+**About Me:** Hello, my name is Krish Nangia, and I am currently an undergraduate junior majoring in Computer Engineering at the Univesity of Illinois at Urbana-Champaign, with an expected graduation date of December 2025. I am a driven student with a diverse background in machine learning, data science, and software engineering. My experience spans various industries, including insurance, agriculture, and renewable energy, where I’ve delivered impactful projects, such as deploying scalable LLM solutions, creating time-series forecasting models, and developing IoT-based tools.
+
+​I am very passionate about leveraging technology for the betterment of today's society. I hope to explore different aspects of software development and data science/analytics to ultimately use the skills gained to help further advance technology in other fields.
+
+**LinkedIn:** https://www.linkedin.com/in/krish-nangia-uiuc
+
+**Other:** https://www.github.com/knangia04
+
 ### Asuthosh Anandaram 
 
 **About Me:**
@@ -86,17 +96,6 @@ Asuthosh has extensive experience working with eBPF (Extended Berkeley Packet Fi
 **LinkedIn:**
 
 **Other:**
-
-### Krish Nangia
-
-**About Me:** Hello, my name is Krish Nangia, and I am currently an undergraduate junior majoring in Computer Engineering at the Univesity of Illinois at Urbana-Champaign, with an expected graduation date of December 2025. I am a driven student with a diverse background in machine learning, data science, and software engineering. My experience spans various industries, including insurance, agriculture, and renewable energy, where I’ve delivered impactful projects, such as deploying scalable LLM solutions, creating time-series forecasting models, and developing IoT-based tools.
-
-​I am very passionate about leveraging technology for the betterment of today's society. I hope to explore different aspects of software development and data science/analytics to ultimately use the skills gained to help further advance technology in other fields.
-
-**LinkedIn:** https://www.linkedin.com/in/krish-nangia-uiuc
-
-**Other:** https://www.github.com/knangia04
-
 ___
 
 
